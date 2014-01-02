@@ -1063,7 +1063,7 @@
 			this.selectedItem = null;
 			this.highlightedItem = null;
 			this.getChildren().forEach(function (optionElement, index) {
-				if (optionElement.attr("data-value") === value) {
+				if (optionElement.attr("data-value") === (value || "").toString()) {
 					self.selectedItem = optionElement;
 					self.highlightedItem = optionElement;
 					optionElement.addClass("selected");
