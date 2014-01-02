@@ -206,7 +206,7 @@
 				return !!this.attr("disabled");
 			}
 			return this;
-		};		
+		};
 		Element.prototype.tabindex = function (value) {
 			if (value) {
 				this.attr("tabindex", value);
@@ -765,7 +765,6 @@
 		TextField.prototype = new Element("div");
 		html.TextField = TextField;
 
-		
 		function DateField() {
 			var self = this;
 			mixin(this, Field);
@@ -784,7 +783,7 @@
 				var value = self._dateField.value();
 				var parts;
 				self._dateField.removeClass("invalid");
-				
+
 				if (value.match(/^[0-9]{4,4}$/)) {
 					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + new Date().getFullYear());
 				}
@@ -841,8 +840,7 @@
 
 		DateField.prototype = new Element("div");
 		html.DateField = DateField;
-		
-		
+
 		function Selectbox() {
 			var self = this;
 
@@ -870,7 +868,7 @@
 					self._mouseInfo.source = null;
 					self._mouseInfo.isdown = false;
 					self._mouseInfo.islong = false;
-					
+
 					if (self.readonly()) { return false; }
 					return self.removeClass("expanded").addClass("collapsed");
 				});
@@ -928,8 +926,7 @@
 
 			this.addEventListener("keyup", function (e) {
 				if (self.readonly()) { return; }
-				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey &&
-					!e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
+				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
 					if (self._optionList.hasNotClass("visible")) {
 						highlightSelectedItem(self._optionList);
 						showOptionList(e);
@@ -967,19 +964,18 @@
 		Selectbox.OptionList.prototype.options = function (options) {
 			var self = this;
 			var previousElement = null;
-			
+
 			if (options === undefined) {
 				return self._options;
 			}
 			self._options = options;
 			self.selectedItem = null;
 			self.highlightedItem = null;
-			
+
 			self.addEventListener("keyup", function (e) {
 				if (self.readonly()) { return; }
 				var currentItem = (self.highlightedItem || self.selectedItem) || (self.getChildren().length && self.getChildren()[0]);
-				if (e.keyCode === 38 && !e.shiftKey &&
-					!e.ctrlKey && !e.metaKey) { // Up
+				if (e.keyCode === 38 && !e.shiftKey && !e.ctrlKey && !e.metaKey) { // Up
 					if (self.hasClass("visible")) {
 						var previousOption = currentItem && currentItem.previousOption;
 						self.removeClass("nohover");
@@ -992,8 +988,7 @@
 						return false;
 					}
 				}
-				if (e.keyCode === 40 && !e.shiftKey &&
-					!e.ctrlKey && !e.metaKey) { // Down
+				if (e.keyCode === 40 && !e.shiftKey && !e.ctrlKey && !e.metaKey) { // Down
 					if (self.hasClass("visible")) {
 						var nextOption = currentItem && currentItem.nextOption;
 						self.removeClass("nohover");
@@ -1006,8 +1001,7 @@
 						return false;
 					}
 				}
-				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey &&
-					!e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
+				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
 					self.hide().emit("selected", currentItem.attr("data-value"));
 					e.preventDefault();
 					return false;
@@ -1020,12 +1014,12 @@
 					.attr("data-value", key)
 					.text(options[key]);
 				if (previousElement) {
-					previousElement.nextOption= element;
+					previousElement.nextOption = element;
 					element.previousOption = previousElement;
 				}
 				element.nextOption = null;
 				previousElement = element;
-				
+
 				self.append(element);
 				element.addEventListener("mouseover", function () {
 					self.removeClass("nohover");
@@ -1045,7 +1039,7 @@
 					return false;
 				});
 				element.addEventListener("mouseup", function () {
-					if (self._mouseInfo.islong || self._mouseInfo.source === self) { 
+					if (self._mouseInfo.islong || self._mouseInfo.source === self) {
 						self.hide().emit("selected", key);
 					}
 					self._mouseInfo.source = null;
@@ -1082,7 +1076,7 @@
 					optionElement.removeClass("selected");
 				}
 			});
-			
+
 			return this;
 		};
 		Selectbox.OptionList.prototype.show = function () {
