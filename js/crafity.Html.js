@@ -860,9 +860,11 @@
 
 			this._optionList
 				.on("selected", function (value) {
-					self.value(value);
+					if (self.value() !== value) {
+						self.value(value);
+						self.emit("selected", value);
+					}
 					self.focus();
-					self.emit("selected", value);
 				})
 				.on("lostFocus", function () {
 					self._mouseInfo.source = null;
