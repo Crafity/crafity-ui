@@ -625,8 +625,16 @@
 					if (column.editable) {
 						var instantiate = new Function("return new crafity.html." + column.editable.control + "()");
 						var editControl = instantiate();
-						editControl.options(column.options);
+						if (column.options) { editControl.options(column.options); }
 						editControl.value(actualValue);
+						if (column.editable.events && column.editable.events.length) {
+							column.editable.events.forEach(function (event) {
+								editControl.on(event, function () {
+									var args = Array.prototype.slice.apply(arguments);
+									self.emit.apply(self, [event, column, row].concat(args));
+								});
+							});
+						}
 
 						td.append(editControl);
 					} else {
