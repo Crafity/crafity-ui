@@ -1089,7 +1089,7 @@
 		Selectbox.prototype.value = function (value) {
 			var self = this;
 			if (value === undefined) {
-				return this._selectedValue.text();
+				return this._optionList.value();
 			}
 			this._optionList.value(value);
 			this._selectedValue.text(this._optionList.getFriendlyName() || "");
