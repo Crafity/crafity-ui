@@ -1112,6 +1112,9 @@
 			//this[__PROTO__] = new Field();
 			this.addClass("selectfield edit");
 			this._selectbox = new Selectbox();
+			this._selectbox.on("selected", function (value) {
+				self.emit("selected", value);
+			});
 
 			this.options = function (options) {
 				if (options === undefined) {
