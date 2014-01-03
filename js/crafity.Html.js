@@ -1,4 +1,4 @@
-/*jslint browser: true, nomen: true, vars: true, white: true, evil: true, forin: true */
+/*jslint browser: true, nomen: true, vars: true, white: true, evil: true, forin: true, ass: true */
 /*globals Window, numeral, moment, console*/
 
 (function (crafity) {
@@ -388,9 +388,6 @@
 				}
 				self._searchBox.on("change", filter);
 			};
-			this.onClientSelected = function filter(cb) {
-
-			};
 			this._listitems = [];
 			this.addClass("list");
 			this._itemContainer = new Element("ul").addClass("itemContainer");
@@ -478,7 +475,6 @@
 			var tbody = new Element("tbody").appendTo(table);
 			var TYPE_DATE = "Date";
 			var TYPE_NUMBER = "Number";
-			var TYPE_BOOLEAN = "Boolean";
 
 			var EMPTY_VALUE = " ";
 			var ASC = "ascending";
@@ -521,7 +517,7 @@
 						}
 						return value;
 					});
-				valuesSortedPerColumn = valuesSortedPerColumn.filter(function onlyUnique(value, index, self) {
+				valuesSortedPerColumn = valuesSortedPerColumn.filter(function onlyUnique(value, index) {
 					return valuesSortedPerColumn.indexOf(value) === index;
 				});
 
@@ -745,7 +741,7 @@
 		};
 		html.Field = Field;
 
-		function mixin(target, Type, args) {
+		function mixin(target, Type) {
 			var instance = new Type();
 			var prop;
 
@@ -816,27 +812,27 @@
 				if (value.match(/^[0-9]{8,8}$/)) {
 					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + value.substr(4, 4));
 				}
-				if (value.match(/^[0-9]{1,2}[-][0-9]{1,2}$/)) {
+				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}$/)) {
 					parts = value.split('-');
 					parts[2] = new Date().getFullYear();
 					return self._dateField.value(parts.join("-"));
 				}
-				if (value.match(/^[0-9]{1,2}[-][0-9]{1,2}[-][0-9]{1,1}$/)) {
+				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
 					parts = value.split('-');
 					parts[2] = "200" + parts[2];
 					return self._dateField.value(parts.join("-"));
 				}
-				if (value.match(/^[0-9]{1,2}[-][0-9]{1,2}[-][0-9]{1,1}$/)) {
+				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
 					parts = value.split('-');
 					parts[2] = "200" + parts[2];
 					return self._dateField.value(parts.join("-"));
 				}
-				if (value.match(/^[0-9]{1,2}[-][0-9]{1,2}[-][0-9]{2,2}$/)) {
+				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{2,2}$/)) {
 					parts = value.split('-');
 					parts[2] = "20" + parts[2];
 					return self._dateField.value(parts.join("-"));
 				}
-				if (value.match(/^[0-9]{1,2}[-][0-9]{1,2}[-][0-9]{4,4}$/)) {
+				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{4,4}$/)) {
 					return false;
 				}
 				if (value.length === 0) {
