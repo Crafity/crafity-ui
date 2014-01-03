@@ -863,7 +863,7 @@
 		function Selectbox() {
 			var self = this;
 
-			this._selectedValue = new Element("span");
+			this._selectedValue = new Element("span").text(" ");
 			this.append(this._selectedValue);
 
 			this._optionList = new Selectbox.OptionList();
@@ -964,6 +964,7 @@
 
 		Selectbox.OptionList = function OptionList() {
 			var self = this;
+			this._elements = [];
 			this._mouseInfo = {
 				isdown: false,
 				islong: false,
@@ -983,6 +984,7 @@
 		Selectbox.OptionList.prototype.options = function (options) {
 			var self = this;
 			var previousElement = null;
+			self._elements = [];
 
 			if (options === undefined) {
 				return self._options;
@@ -1011,6 +1013,7 @@
 					if (self.hasClass("visible")) {
 						var nextOption = currentItem && currentItem.nextOption;
 						self.removeClass("nohover");
+						self._elements.forEach(function (el) { el.removeClass("hover"); });
 						if (nextOption) {
 							nextOption.addClass("hover");
 							if (currentItem) { currentItem.removeClass("hover"); }
@@ -1032,6 +1035,7 @@
 					.addClass("option")
 					.attr("data-value", key)
 					.text(options[key]);
+				self._elements.push(element);
 				if (previousElement) {
 					previousElement.nextOption = element;
 					element.previousOption = previousElement;
