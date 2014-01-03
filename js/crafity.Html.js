@@ -181,7 +181,7 @@
 			return this;
 		};
 		Element.prototype.isVisible = function () {
-			return !this.hasClass("hidden");
+			return this.hasClass("visible") || !this.hasClass("hidden");
 		};
 		Element.prototype.readonly = function (value) {
 			if (value === true) {
