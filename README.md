@@ -22,3 +22,8 @@ Include the following JS files to include the crafity HTML Controls
 	<script type="text/javascript" src="js/crafity.Html.DateField.js"></script>
 	<script type="text/javascript" src="js/crafity.Html.Selectbox.js"></script>
 	<script type="text/javascript" src="js/crafity.Html.SelectField.js"></script>
+
+or include the minified version like this...
+
+	<!--[if lt IE 9]><script type="text/javascript" src="js/lib/ie-shim.js"></script><![endif]-->
+	<!--<script type="text/javascript" src="js/crafity.ui.min.js"></script>-->
