@@ -249,7 +249,9 @@
 				});
 				self.addEventListener.change = [];
 			} else if (typeof callback === 'function') {
-				self.addEventListener("change", callback);
+				self.addEventListener("change", function	() {
+					callback(self.value());
+				});
 				if (!self.addEventListener.change) {
 					self.addEventListener.change = [];
 				}
