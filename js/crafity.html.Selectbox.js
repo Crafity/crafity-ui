@@ -28,7 +28,7 @@
 					}
 					self.focus();
 				})
-				.on("lostFocus", function () {
+				.blur(function () {
 					self._mouseInfo.source = null;
 					self._mouseInfo.isdown = false;
 					self._mouseInfo.islong = false;
