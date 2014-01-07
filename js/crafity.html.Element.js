@@ -273,6 +273,24 @@
 				self.addEventListener.focus.push(callback);
 			}
 		};
+		Element.prototype.blur = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				throw new Error("Argument 'callback' is required");
+			} else if (callback === null && this.addEventListener.blur) {
+				self.addEventListener.blur.forEach(function (cb) {
+					self.removeEventListener("blur", cb);
+				});
+				self.addEventListener.blur = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("blur", callback);
+				if (!self.addEventListener.blur) {
+					self.addEventListener.blur = [];
+				}
+				self.addEventListener.blur.push(callback);
+			}
+		};
+
 		Element.prototype.id = function (id) {
 			if (id) {
 				this.getElement().setAttribute("id", id);
