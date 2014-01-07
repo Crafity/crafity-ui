@@ -1,4 +1,5 @@
 /*jslint browser: true, nomen: true, vars: true, white: true*/
+/*globals moment*/
 
 (function (crafity) {
 	"use strict";
@@ -22,42 +23,52 @@
 			this._dateField.addEventListener("blur", function (e) {
 				var value = self._dateField.value();
 				var parts;
+				window.d = null;
 				self._dateField.removeClass("invalid");
+				try {
 
-				if (value.match(/^[0-9]{4,4}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + new Date().getFullYear());
-				}
-				if (value.match(/^[0-9]{6,6}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-20' + value.substr(4, 2));
-				}
-				if (value.match(/^[0-9]{8,8}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + value.substr(4, 4));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}$/)) {
-					parts = value.split('-');
-					parts[2] = new Date().getFullYear();
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
-					parts = value.split('-');
-					parts[2] = "200" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
-					parts = value.split('-');
-					parts[2] = "200" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{2,2}$/)) {
-					parts = value.split('-');
-					parts[2] = "20" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{4,4}$/)) {
-					return false;
-				}
-				if (value.length === 0) {
-					return false;
+					if (value.match(/^[0-9]{4,4}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + new Date().getFullYear());
+					}
+					if (value.match(/^[0-9]{6,6}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-20' + value.substr(4, 2));
+					}
+					if (value.match(/^[0-9]{8,8}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + value.substr(4, 4));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}$/)) {
+						parts = value.split('-');
+						parts[2] = new Date().getFullYear();
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
+						parts = value.split('-');
+						parts[2] = "200" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
+						parts = value.split('-');
+						parts[2] = "200" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{2,2}$/)) {
+						parts = value.split('-');
+						parts[2] = "20" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{4,4}$/)) {
+						return false;
+					}
+					if (value.length === 0) {
+						return false;
+					}
+				} finally {
+					if (!moment(self._dateField.value(), "nl").isValid()) {
+						self._dateField.focus();
+						self._dateField.addClass("invalid");
+						e.preventDefault();
+						return false;
+					}
 				}
 				self._dateField.focus();
 				self._dateField.addClass("invalid");
