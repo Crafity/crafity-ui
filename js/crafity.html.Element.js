@@ -255,6 +255,7 @@
 				}
 				self.addEventListener.change.push(callback);
 			}
+			return self;
 		};
 		Element.prototype.focus = function (callback) {
 			var self = this;
@@ -272,6 +273,7 @@
 				}
 				self.addEventListener.focus.push(callback);
 			}
+			return self;
 		};
 		Element.prototype.blur = function (callback) {
 			var self = this;
@@ -289,6 +291,7 @@
 				}
 				self.addEventListener.blur.push(callback);
 			}
+			return self;
 		};
 
 		Element.prototype.id = function (id) {

@@ -26,18 +26,21 @@
 				throw new Error("Unable to register blur event, because no _control has been assigned");
 			}
 			this._control.blur(callback);
+			return this;
 		};
 		Field.prototype.focus = function (callback) {
 			if (!this._control) {
 				throw new Error("Unable to register focus event, because no _control has been assigned");
 			}
 			this._control.focus(callback);
+			return this;
 		};
 		Field.prototype.change = function (callback) {
 			if (!this._control) {
 				throw new Error("Unable to register change event, because no _control has been assigned");
 			}
 			this._control.change(callback);
+			return this;
 		};
 		html.Field = Field;
 
