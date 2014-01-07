@@ -63,13 +63,16 @@
 						return false;
 					}
 				} finally {
-					if (!moment(self._dateField.value(), "nl").isValid()) {
+					if (self._dateField.value() && !moment(self._dateField.value(), "nl").isValid()) {
 						self._dateField.focus();
 						self._dateField.addClass("invalid");
 						e.preventDefault();
 						return false;
+					} else if (self._dateField.value() === "") {
+						return false;
 					}
 				}
+
 				self._dateField.focus();
 				self._dateField.addClass("invalid");
 				e.preventDefault();
