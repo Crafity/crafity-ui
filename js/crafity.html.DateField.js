@@ -104,7 +104,11 @@
 				}
 				this._dateField.change(function (value) {
 					if (!self.isValid) { return; }
-					callback(value);
+					if (value) {
+						callback(moment(value).toDate());
+					} else {
+						callback(null);
+					}
 				});
 				return this;
 			};
