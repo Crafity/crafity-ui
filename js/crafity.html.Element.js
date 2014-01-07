@@ -239,6 +239,22 @@
 			}
 			return this.getElement().value;
 		};
+		Element.prototype.change = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				throw new Error("Argument 'callback' is required");
+			} else if (callback === null && this.addEventListener.change) {
+				self.addEventListener.change.forEach(function (cb) {
+					self.removeEventListener("change", cb);
+				});
+				self.addEventListener.change = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("change", callback);
+				if (!self.addEventListener.change) {
+					self.addEventListener.change = [];
+				}
+				self.addEventListener.change.push(callback);
+			}
 		};
 		Element.prototype.focus = function (callback) {
 			var self = this;
