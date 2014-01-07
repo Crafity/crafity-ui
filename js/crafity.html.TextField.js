@@ -10,7 +10,7 @@
 			crafity.core.mixin(this, html.Field);
 
 			this.addClass("textfield edit");
-			this._textField = new html.Element("input").attr("type", "text");
+			this._textField = this._control = new html.Element("input").attr("type", "text");
 			this.append(this._textField);
 			this.value = function (value) {
 				if (value === undefined) {

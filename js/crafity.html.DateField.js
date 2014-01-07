@@ -10,7 +10,7 @@
 			var self = this;
 			crafity.core.mixin(this, html.Field);
 			this.addClass("datefield edit");
-			this._dateField = new html.Element("input").attr("type", "text");
+			this._dateField = this._control = new html.Element("input").attr("type", "text");
 			this.append(this._dateField);
 			this.value = function (value) {
 				if (value === undefined) {
