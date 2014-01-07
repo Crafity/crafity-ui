@@ -239,8 +239,23 @@
 			}
 			return this.getElement().value;
 		};
-		Element.prototype.focus = function () {
-			this.getElement().focus();
+		};
+		Element.prototype.focus = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				self.getElement().focus();
+			} else if (callback === null && this.addEventListener.focus) {
+				self.addEventListener.focus.forEach(function (cb) {
+					self.removeEventListener("focus", cb);
+				});
+				self.addEventListener.focus = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("focus", callback);
+				if (!self.addEventListener.focus) {
+					self.addEventListener.focus = [];
+				}
+				self.addEventListener.focus.push(callback);
+			}
 		};
 		Element.prototype.id = function (id) {
 			if (id) {
