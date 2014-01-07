@@ -8,6 +8,7 @@
 
 		function DateField() {
 			var self = this;
+			this.isValid = true;
 			crafity.core.mixin(this, html.Field);
 			this.addClass("datefield edit");
 			this._dateField = this._control = new html.Element("input").attr("type", "text");
@@ -20,11 +21,14 @@
 				return this;
 
 			};
-			this._dateField.addEventListener("blur", function (e) {
+			this._dateField.addEventListener("blur", parseDate);
+			this._dateField.addEventListener("change", parseDate);
+			function parseDate(e) {
 				var value = self._dateField.value();
 				var parts;
 				window.d = null;
 				self._dateField.removeClass("invalid");
+				self.isValid = true;
 				try {
 
 					if (value.match(/^[0-9]{4,4}$/)) {
@@ -64,20 +68,23 @@
 					}
 				} finally {
 					if (self._dateField.value() && !moment(self._dateField.value(), "nl").isValid()) {
+						self.isValid = false;
 						self._dateField.focus();
 						self._dateField.addClass("invalid");
 						e.preventDefault();
 						return false;
 					} else if (self._dateField.value() === "") {
-						return false;
+						return true;
 					}
 				}
 
 				self._dateField.focus();
 				self._dateField.addClass("invalid");
+				self.isValid = false;
 				e.preventDefault();
 				return false;
-			});
+			}
+
 			this.on("readonlyChanged", function (bool) {
 				if (bool === true) {
 					self.removeClass("edit").addClass("readonly")
@@ -90,6 +97,18 @@
 						.attr("placeholder", "dd-mm-jjjj");
 				}
 			});
+
+			this.change = function (callback) {
+				if (callback === undefined) {
+					throw new Error("Argument 'callback' is required");
+				}
+				this._dateField.change(function (value) {
+					if (!self.isValid) { return; }
+					callback(value);
+				});
+				return this;
+			};
+
 		}
 
 		DateField.prototype = new html.Element("div");
