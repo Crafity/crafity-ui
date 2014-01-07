@@ -11,6 +11,7 @@ Include the following JS files to include the crafity HTML Controls
 	<script type="text/javascript" src="js/crafity.keyboard.js"></script>
 	<script type="text/javascript" src="js/crafity.html.Element.js"></script>
 	<script type="text/javascript" src="js/crafity.html.Menu.js"></script>
+	<script type="text/javascript" src="js/crafity.Html.PasswordField.js"></script>
 	<script type="text/javascript" src="js/crafity.html.Searchbox.js"></script>
 	<script type="text/javascript" src="js/crafity.Html.List.js"></script>
 	<script type="text/javascript" src="js/crafity.Html.Grid.js"></script>

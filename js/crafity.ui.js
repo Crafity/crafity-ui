@@ -712,9 +712,58 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			}
 			return this.getElement().value;
 		};
-		Element.prototype.focus = function () {
-			this.getElement().focus();
+		Element.prototype.change = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				throw new Error("Argument 'callback' is required");
+			} else if (callback === null && this.addEventListener.change) {
+				self.addEventListener.change.forEach(function (cb) {
+					self.removeEventListener("change", cb);
+				});
+				self.addEventListener.change = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("change", callback);
+				if (!self.addEventListener.change) {
+					self.addEventListener.change = [];
+				}
+				self.addEventListener.change.push(callback);
+			}
 		};
+		Element.prototype.focus = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				self.getElement().focus();
+			} else if (callback === null && this.addEventListener.focus) {
+				self.addEventListener.focus.forEach(function (cb) {
+					self.removeEventListener("focus", cb);
+				});
+				self.addEventListener.focus = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("focus", callback);
+				if (!self.addEventListener.focus) {
+					self.addEventListener.focus = [];
+				}
+				self.addEventListener.focus.push(callback);
+			}
+		};
+		Element.prototype.blur = function (callback) {
+			var self = this;
+			if (callback === undefined) {
+				throw new Error("Argument 'callback' is required");
+			} else if (callback === null && this.addEventListener.blur) {
+				self.addEventListener.blur.forEach(function (cb) {
+					self.removeEventListener("blur", cb);
+				});
+				self.addEventListener.blur = [];
+			} else if (typeof callback === 'function') {
+				self.addEventListener("blur", callback);
+				if (!self.addEventListener.blur) {
+					self.addEventListener.blur = [];
+				}
+				self.addEventListener.blur.push(callback);
+			}
+		};
+
 		Element.prototype.id = function (id) {
 			if (id) {
 				this.getElement().setAttribute("id", id);
@@ -832,6 +881,47 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 
 }(window.crafity = window.crafity || {}));
 		
+/*jslint browser: true, nomen: true, vars: true, white: true*/
+
+(function (crafity) {
+	"use strict";
+
+	(function (html) {
+
+		function PasswordField() {
+			var self = this;
+			crafity.core.mixin(this, html.Field);
+
+			this.addClass("PasswordField edit");
+			this._PasswordField = this._control = new html.Element("input").attr("type", "password");
+			this.append(this._PasswordField);
+			this.value = function (value) {
+				if (value === undefined) {
+					return this._PasswordField.value();
+				}
+				this._PasswordField.value(value);
+				return this;
+
+			};
+
+			this.on("readonlyChanged", function (bool) {
+				if (bool === true) {
+					self.removeClass("edit").addClass("readonly")
+						._PasswordField.readonly(true).tabindex("-1");
+				}
+				if (bool === false) {
+					self.addClass("edit").removeClass("readonly")
+						._PasswordField.readonly(false).tabindex(null);
+				}
+			});
+		}
+
+		PasswordField.prototype = new html.Element("div");
+		html.PasswordField = PasswordField;
+
+	}(crafity.html = crafity.html || {}));
+
+}(window.crafity = window.crafity || {}));
 /*jslint browser: true, nomen: true, vars: true, white: true */
 
 (function (crafity) {
@@ -1286,6 +1376,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this.addClass("field");
 			this._innerSpan = new html.Element("span").addClass("border");
 			this._label = new html.Element("label").append(this._innerSpan);
+			this._control = null;
 			this.append(this._label);
 		}
 
@@ -1296,6 +1387,24 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			}
 			this._innerSpan.text(name);
 			return this;
+		};
+		Field.prototype.blur = function (callback) {
+			if (!this._control) {
+				throw new Error("Unable to register blur event, because no _control has been assigned");
+			}
+			this._control.blur(callback);
+		};
+		Field.prototype.focus = function (callback) {
+			if (!this._control) {
+				throw new Error("Unable to register focus event, because no _control has been assigned");
+			}
+			this._control.focus(callback);
+		};
+		Field.prototype.change = function (callback) {
+			if (!this._control) {
+				throw new Error("Unable to register change event, because no _control has been assigned");
+			}
+			this._control.change(callback);
 		};
 		html.Field = Field;
 
@@ -1314,7 +1423,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			crafity.core.mixin(this, html.Field);
 
 			this.addClass("textfield edit");
-			this._textField = new html.Element("input").attr("type", "text");
+			this._textField = this._control = new html.Element("input").attr("type", "text");
 			this.append(this._textField);
 			this.value = function (value) {
 				if (value === undefined) {
@@ -1344,6 +1453,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 
 }(window.crafity = window.crafity || {}));
 /*jslint browser: true, nomen: true, vars: true, white: true*/
+/*globals moment*/
 
 (function (crafity) {
 	"use strict";
@@ -1354,7 +1464,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			var self = this;
 			crafity.core.mixin(this, html.Field);
 			this.addClass("datefield edit");
-			this._dateField = new html.Element("input").attr("type", "text");
+			this._dateField = this._control = new html.Element("input").attr("type", "text");
 			this.append(this._dateField);
 			this.value = function (value) {
 				if (value === undefined) {
@@ -1367,43 +1477,56 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this._dateField.addEventListener("blur", function (e) {
 				var value = self._dateField.value();
 				var parts;
+				window.d = null;
 				self._dateField.removeClass("invalid");
+				try {
 
-				if (value.match(/^[0-9]{4,4}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + new Date().getFullYear());
+					if (value.match(/^[0-9]{4,4}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + new Date().getFullYear());
+					}
+					if (value.match(/^[0-9]{6,6}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-20' + value.substr(4, 2));
+					}
+					if (value.match(/^[0-9]{8,8}$/)) {
+						return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + value.substr(4, 4));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}$/)) {
+						parts = value.split('-');
+						parts[2] = new Date().getFullYear();
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
+						parts = value.split('-');
+						parts[2] = "200" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
+						parts = value.split('-');
+						parts[2] = "200" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{2,2}$/)) {
+						parts = value.split('-');
+						parts[2] = "20" + parts[2];
+						return self._dateField.value(parts.join("-"));
+					}
+					if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{4,4}$/)) {
+						return false;
+					}
+					if (value.length === 0) {
+						return false;
+					}
+				} finally {
+					if (self._dateField.value() && !moment(self._dateField.value(), "nl").isValid()) {
+						self._dateField.focus();
+						self._dateField.addClass("invalid");
+						e.preventDefault();
+						return false;
+					} else if (self._dateField.value() === "") {
+						return false;
+					}
 				}
-				if (value.match(/^[0-9]{6,6}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-20' + value.substr(4, 2));
-				}
-				if (value.match(/^[0-9]{8,8}$/)) {
-					return self._dateField.value(value.substr(0, 2) + '-' + value.substr(2, 2) + '-' + value.substr(4, 4));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}$/)) {
-					parts = value.split('-');
-					parts[2] = new Date().getFullYear();
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
-					parts = value.split('-');
-					parts[2] = "200" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{1,1}$/)) {
-					parts = value.split('-');
-					parts[2] = "200" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{2,2}$/)) {
-					parts = value.split('-');
-					parts[2] = "20" + parts[2];
-					return self._dateField.value(parts.join("-"));
-				}
-				if (value.match(/^[0-9]{1,2}[\-][0-9]{1,2}[\-][0-9]{4,4}$/)) {
-					return false;
-				}
-				if (value.length === 0) {
-					return false;
-				}
+
 				self._dateField.focus();
 				self._dateField.addClass("invalid");
 				e.preventDefault();
@@ -1459,7 +1582,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 					}
 					self.focus();
 				})
-				.on("lostFocus", function () {
+				.blur(function () {
 					self._mouseInfo.source = null;
 					self._mouseInfo.isdown = false;
 					self._mouseInfo.islong = false;
@@ -1724,7 +1847,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			crafity.core.mixin(this, html.Field);
 			//this[__PROTO__] = new Field();
 			this.addClass("selectfield edit");
-			this._selectbox = new html.Selectbox();
+			this._selectbox = this._control = new html.Selectbox();
 			this._selectbox.on("selected", function (value) {
 				self.emit("selected", value);
 			});
