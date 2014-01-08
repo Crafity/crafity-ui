@@ -303,7 +303,7 @@ little-arrow-size=3px
 .button
 	display: inline-block
 	text-align: center
-	//min-width: 30px
+	min-width: 30px
 	border: 1px solid #C0C0C0
 	border-radius: 4px
 	padding: 5px 20px
@@ -319,6 +319,8 @@ little-arrow-size=3px
 	height: 15px
 	color: #666
 	float: left
+	&.hidden
+		display: none	
 	&.right
 		float: right
 		margin-left: 10px
@@ -327,7 +329,8 @@ little-arrow-size=3px
 		//background-image: none
 		//background-color: blue
 		box-shadow: rgba(150, 150, 150, .5) 0 1px 10px 0 inset
-	&.bigger
+	&.smaller
+		min-width: initial		
 		font-weight: 500
 		height: 19px
 		font-size: 1.2em
