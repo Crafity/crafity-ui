@@ -10,7 +10,13 @@
 			if (!this || this instanceof Window) {
 				return new Element(type);
 			}
-			this._type = type;
+			if (type instanceof HTMLElement) {
+				this._type = type.nodeName;
+				this._element = type;
+			} else {
+				this._element = null;
+				this._type = type;
+			}
 		}
 
 		Element.prototype = crafity.core.EventEmitter.prototype;
