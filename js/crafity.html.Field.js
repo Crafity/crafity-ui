@@ -21,6 +21,16 @@
 			this._innerSpan.text(name);
 			return this;
 		};
+		Field.prototype.value = function (value) {
+			if (!this._control) {
+				throw new Error("Unable to get the value, because no _control has been assigned");
+			}
+			if (value === undefined) {
+				return this._control.value();
+			}
+			this._control.value(value);
+			return this;
+		};
 		Field.prototype.blur = function (callback) {
 			if (!this._control) {
 				throw new Error("Unable to register blur event, because no _control has been assigned");
@@ -41,6 +51,34 @@
 			}
 			this._control.change(callback);
 			return this;
+		};
+		Field.prototype.verify = function () {
+			if (this.isValid()) {
+				this.removeClass("invalid");
+			} else {
+				this.addClass("invalid");
+			}
+			return this.isValid();
+		};
+		Field.prototype.required = function (value) {
+			var self = this;
+			if (value === true) {
+				this.addClass("required");
+				this._required = value;
+				this.blur(function () {
+					self.verify();
+				});
+			} else if (value === false) {
+				this.removeClass("required");
+				this._required = value;
+			} else {
+				return !!this._required;
+			}
+			return this;
+		};
+		Field.prototype.isValid = function () {
+			return (!this._required || (this._required && !!this.value())) &&
+				(this._isValid === undefined || this._isValid);
 		};
 		html.Field = Field;
 

@@ -4,11 +4,12 @@
 	"use strict";
 
 	(function (html) {
-
+		var EMPTY_SELECT_VALUE = " ";
+		
 		function Selectbox() {
 			var self = this;
 
-			this._selectedValue = new html.Element("span").text(" ");
+			this._selectedValue = new html.Element("span").text(EMPTY_SELECT_VALUE);
 			this.append(this._selectedValue);
 
 			this._optionList = new Selectbox.OptionList();
@@ -47,6 +48,14 @@
 				self._optionList.readonly(bool);
 			});
 			var showOptionListTimer;
+			this.value = function (value) {
+				if (value === undefined) {
+					return self._optionList.value();
+				}
+				self._optionList.value(value);
+				self._selectedValue.text(self._optionList.getFriendlyName() || EMPTY_SELECT_VALUE);
+				return self;
+			};
 
 			function showOptionList(e) {
 				clearTimeout(showOptionListTimer);
@@ -124,6 +133,26 @@
 				self.removeClass("expanded").addClass("collapsed").removeClass("visible");
 				self.emit("lostFocus");
 			});
+			this.value = function (value) {
+				if (value === undefined) {
+					return self._selectedValue;
+				}
+				self._selectedValue = value;
+				self.selectedItem = null;
+				self.highlightedItem = null;
+				self.getChildren().forEach(function (optionElement, index) {
+					if (optionElement.attr("data-value") === (value || "").toString()) {
+						self.selectedItem = optionElement;
+						self.highlightedItem = optionElement;
+						optionElement.addClass("selected");
+						self.getElement().style.marginTop = -1 * (16 + 2) * index + "px";
+					} else {
+						optionElement.removeClass("selected");
+					}
+				});
+
+				return self;
+			};
 		};
 		Selectbox.OptionList.prototype = new html.Element("div");
 		Selectbox.OptionList.prototype.options = function (options) {
@@ -158,7 +187,9 @@
 					if (self.hasClass("visible")) {
 						var nextOption = currentItem && currentItem.nextOption;
 						self.removeClass("nohover");
-						self._elements.forEach(function (el) { el.removeClass("hover"); });
+						self._elements.forEach(function (el) {
+							el.removeClass("hover");
+						});
 						if (nextOption) {
 							nextOption.addClass("hover");
 							if (currentItem) { currentItem.removeClass("hover"); }
@@ -226,27 +257,6 @@
 		Selectbox.OptionList.prototype.getFriendlyName = function () {
 			return this._options[this.value()];
 		};
-		Selectbox.OptionList.prototype.value = function (value) {
-			var self = this;
-			if (value === undefined) {
-				return this._selectedValue;
-			}
-			this._selectedValue = value;
-			this.selectedItem = null;
-			this.highlightedItem = null;
-			this.getChildren().forEach(function (optionElement, index) {
-				if (optionElement.attr("data-value") === (value || "").toString()) {
-					self.selectedItem = optionElement;
-					self.highlightedItem = optionElement;
-					optionElement.addClass("selected");
-					self.getElement().style.marginTop = -1 * (16 + 2) * index + "px";
-				} else {
-					optionElement.removeClass("selected");
-				}
-			});
-
-			return this;
-		};
 		Selectbox.OptionList.prototype.show = function () {
 			this.removeClass("collapsed").addClass("visible expanded").focus();
 			if (this.selectedItem) { this.selectedItem.addClass("hover"); }
@@ -258,15 +268,6 @@
 		};
 
 		Selectbox.prototype = new html.Element("div");
-		Selectbox.prototype.value = function (value) {
-			var self = this;
-			if (value === undefined) {
-				return this._optionList.value();
-			}
-			this._optionList.value(value);
-			this._selectedValue.text(this._optionList.getFriendlyName() || "");
-			return self;
-		};
 		Selectbox.prototype.options = function (options) {
 			var self = this;
 			if (options === undefined) {
@@ -277,7 +278,7 @@
 
 		};
 		html.Selectbox = Selectbox;
-		
+
 	}(crafity.html = crafity.html || {}));
 
 }(window.crafity = window.crafity || {}));

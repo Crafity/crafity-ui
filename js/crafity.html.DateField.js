@@ -8,7 +8,7 @@
 
 		function DateField() {
 			var self = this;
-			this.isValid = true;
+			this._isValid = true;
 			crafity.core.mixin(this, html.Field);
 			this.addClass("datefield edit");
 			this._dateField = this._control = new html.Element("input").attr("type", "text");
@@ -28,7 +28,8 @@
 				var parts;
 				window.d = null;
 				self._dateField.removeClass("invalid");
-				self.isValid = true;
+				self._isValid = true;
+				self.verify();
 				try {
 
 					if (value.match(/^[0-9]{4,4}$/)) {
@@ -68,7 +69,7 @@
 					}
 				} finally {
 					if (self._dateField.value() && !moment(self._dateField.value(), "nl").isValid()) {
-						self.isValid = false;
+						self._isValid = false;
 						self._dateField.focus();
 						self._dateField.addClass("invalid");
 						e.preventDefault();
@@ -80,7 +81,7 @@
 
 				self._dateField.focus();
 				self._dateField.addClass("invalid");
-				self.isValid = false;
+				self._isValid = false;
 				e.preventDefault();
 				return false;
 			}
@@ -103,7 +104,7 @@
 					throw new Error("Argument 'callback' is required");
 				}
 				this._dateField.change(function (value) {
-					if (!self.isValid) { return; }
+					if (!self._isValid) { return; }
 					if (value) {
 						callback(moment(value).toDate());
 					} else {

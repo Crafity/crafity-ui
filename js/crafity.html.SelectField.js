@@ -8,10 +8,11 @@
 		function SelectField() {
 			var self = this;
 			crafity.core.mixin(this, html.Field);
-			//this[__PROTO__] = new Field();
+
 			this.addClass("selectfield edit");
 			this._selectbox = this._control = new html.Selectbox();
 			this._selectbox.on("selected", function (value) {
+				self.verify();
 				self.emit("selected", value);
 			});
 
@@ -21,20 +22,9 @@
 				}
 				this._selectbox.options(options);
 				return this;
-
 			};
 
 			this.append(this._selectbox);
-
-			// value of the selected option
-			this.value = function (value) {
-				if (value === undefined) {
-					return this._selectbox.value();
-				}
-				this._selectbox.value(value);
-				return this;
-
-			};
 
 			this._isreadonly = false;
 			this.readonly = function (bool) {
