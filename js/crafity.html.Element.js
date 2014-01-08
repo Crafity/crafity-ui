@@ -7,15 +7,20 @@
 	(function (html) {
 
 		function Element(type) {
+			if (!type) {
+				throw new Error("Argument 'type' is required");
+			}
 			if (!this || this instanceof Window) {
 				return new Element(type);
 			}
-			if (type instanceof HTMLElement) {
-				this._type = type.nodeName;
-				this._element = type;
-			} else {
+			if (typeof type === "string") {
 				this._element = null;
 				this._type = type;
+			} else {
+				console.log("type", type, typeof type);
+				window.type = type;
+				this._type = type.tagName;
+				this._element = type;
 			}
 		}
 
