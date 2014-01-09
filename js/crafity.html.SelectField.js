@@ -45,7 +45,7 @@
 			};
 		}
 
-		SelectField.prototype = new html.Element();
+		SelectField.prototype = new html.Element("div");
 		html.SelectField = SelectField;
 
 	}(crafity.html = crafity.html || {}));
