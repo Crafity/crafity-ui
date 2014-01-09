@@ -17,7 +17,6 @@
 				this._element = null;
 				this._type = type;
 			} else {
-				console.log("type", type, typeof type);
 				window.type = type;
 				this._type = type.tagName;
 				this._element = type;
