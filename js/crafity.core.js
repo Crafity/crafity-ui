@@ -3,6 +3,8 @@
 (function (crafity) {
 	"use strict";
 
+	crafity.region = "nl";
+	
 	(function (core) {
 
 		core.mixin = function mixin(target, Type) {

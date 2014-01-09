@@ -68,7 +68,7 @@
 						return false;
 					}
 				} finally {
-					if (self._dateField.value() && !moment(self._dateField.value(), crafity.language || "nl").isValid()) {
+					if (self._dateField.value() && !moment(self._dateField.value(), crafity.region || "nl").isValid()) {
 						self._isValid = false;
 						self._dateField.focus();
 						self._dateField.addClass("invalid");
@@ -106,7 +106,7 @@
 				this._dateField.change(function (value) {
 					if (!self._isValid) { return; }
 					if (value) {
-						callback(moment(value, crafity.language || "nl").toDate());
+						callback(moment(value, crafity.region || "nl").toDate());
 					} else {
 						callback(null);
 					}
