@@ -10,6 +10,10 @@
 		}
 
 		Form.prototype = new html.Element("form");
+		Form.prototype.addField = function (field) {
+			this.append(field);
+			return this;
+		};
 		Form.prototype.verify = function () {
 			var isValid = true;
 			this.getChildren().filter(function (child) {
