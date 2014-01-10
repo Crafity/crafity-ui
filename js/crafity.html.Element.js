@@ -268,7 +268,7 @@
 				});
 				self.addEventListener.change = [];
 			} else if (typeof callback === 'function') {
-				self.addEventListener("change", function	() {
+				self.addEventListener("change", function () {
 					callback(self.value());
 				});
 				if (!self.addEventListener.change) {
@@ -343,7 +343,7 @@
 			return this;
 		};
 		html.Element = Element;
-		
+
 	}(crafity.html = crafity.html || {}));
 
 }(window.crafity = window.crafity || {}));
