@@ -9,7 +9,7 @@
 			this.addClass("form");
 		}
 
-		Form.prototype = new html.Element("div");
+		Form.prototype = new html.Element("form");
 		Form.prototype.verify = function () {
 			var isValid = true;
 			this.getChildren().filter(function (child) {
