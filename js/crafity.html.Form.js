@@ -6,7 +6,13 @@
 	(function (html) {
 
 		function Form() {
+			var self = this;
 			this.addClass("form");
+			this.on("readonlyChanged", function (value) {
+				this.getChildren().forEach(function (child) {
+					child.readonly(value);
+				});
+			});
 		}
 
 		Form.prototype = new html.Element("form");
