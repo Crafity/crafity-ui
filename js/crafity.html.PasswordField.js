@@ -9,7 +9,7 @@
 			var self = this;
 			crafity.core.mixin(this, html.Field);
 
-			this.addClass("PasswordField edit");
+			this.addClass("passwordfield edit");
 			this._PasswordField = this._control = new html.Element("input").attr("type", "password");
 			this.append(this._PasswordField);
 			this.value = function (value) {
