@@ -1,75 +1,60 @@
 /*jslint browser: true, nomen: true, vars: true, white: true */
-/*globals console*/
 
 (function (crafity) {
 	"use strict";
 
+	function cmdOrCrl(e) {
+		// (navigator.platform.match(/Mac/) ? e.metaKey : e.ctrlKey
+		return ((e.metaKey && !e.ctrlKey) || (!e.metaKey && e.ctrlKey));
+	}
+
+	function attach(domElement) {
 		var emitter = new crafity.core.EventEmitter();
 
-		function cmdOrCrl(e) {
-			// (navigator.platform.match(/Mac/) ? e.metaKey : e.ctrlKey
-			return ((e.metaKey && !e.ctrlKey) || (!e.metaKey && e.ctrlKey));
-		}
-	
-		window.addEventListener("keydown", function (e) {
-			
+		domElement.addEventListener("keydown", function (e) {
+
 			if (e.shiftKey && cmdOrCrl(e) && e.which === 77) {
-				console.log("cmd+shft+m");
-				emitter.emit("cmd+shft+m", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+shft+m", "cmd+shft+m", e);
 			}
 			if (!e.shiftKey && cmdOrCrl(e) && e.which === 69) {
-				console.log("cmd+e");
-				emitter.emit("cmd+e", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+e", "cmd+e", e);
 			}
 			if (!e.shiftKey && cmdOrCrl(e) && e.which === 76) {
-				console.log("cmd+l");
-				emitter.emit("cmd+l", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+l", "cmd+l", e);
 			}
-			// U+0046 70 
 			if (!e.shiftKey && cmdOrCrl(e) && e.which === 70) {
-				console.log("cmd+f");
-				emitter.emit("cmd+f", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+f", "cmd+f", e);
 			}
 			if (!e.shiftKey && cmdOrCrl(e) && e.which === 78) {
-				emitter.emit("cmd+n", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+n", "cmd+n", e);
 			}
 			if (!e.shiftKey && cmdOrCrl(e) && e.altKey && e.which === 192) {
-				emitter.emit("cmd+opt+n", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+opt+n", "cmd+opt+n", e);
 			}
 			if (!e.shiftKey && e.keyIdentifier === "U+001B" && e.which === 27) {
-				console.log("esc");
-				emitter.emit("esc", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("esc", "esc", e);
 			}
-			
+			if (!e.shiftKey && e.keyIdentifier === "Enter" && e.which === 13) {
+				emitter.emit("enter", "enter", e);
+			}
 			if (e.which === 83 && cmdOrCrl(e)) {
-				console.log("cmd+s");
-				emitter.emit("cmd+s", e);
-				e.preventDefault();
-				return false;
+				emitter.emit("cmd+s", "cmd+s", e);
 			}
 			return true;
 		});
 
-		 crafity.keyboard = {
+		return {
 			on: function (shortcuts, callback) {
 				[].concat(shortcuts).forEach(function (shortcut) {
 					emitter.on(shortcut, callback);
 				});
+			},
+			attach: function (element) {
+				return attach(element.getElement && element.getElement() || element);
 			}
 		};
-	
+	}
+
+	crafity.keyboard = attach(window);
+
 }(window.crafity = window.crafity || {}));
