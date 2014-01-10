@@ -242,6 +242,13 @@
 			}
 			return this.getElement().textContent;
 		};
+		Element.prototype.html = function (html) {
+			if (html) {
+				this.getElement().innerHTML = html;
+				return this;
+			}
+			return this.getElement().innerHTML;
+		};
 		Element.prototype.value = function (value) {
 			if (value !== undefined) {
 				this.getElement().value = value;
