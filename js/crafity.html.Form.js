@@ -19,6 +19,15 @@
 				});
 			return isValid;
 		};
+		Form.prototype.focus = function () {
+			var self = this;
+			html.Element.prototype.focus.apply(this, arguments);
+			self.getChildren().length && self.getChildren()[0].focus();
+			self.getChildren().some(function (child) {
+				if (!child.verify()) { child.focus(); }
+				return !child.isValid();
+			});
+		};
 		html.Form = Form;
 
 	}(crafity.html = crafity.html || {}));
