@@ -195,9 +195,11 @@
 		};
 		Element.prototype.readonly = function (value) {
 			if (value === true) {
+				this.addClass("readonly");
 				this.attr("readonly", "readonly");
 				this.emit("readonlyChanged", value);
 			} else if (value === false) {
+				this.removeClass("readonly");
 				this.attr("readonly", null);
 				this.emit("readonlyChanged", value);
 			} else {
