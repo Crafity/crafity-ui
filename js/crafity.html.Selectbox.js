@@ -97,7 +97,8 @@
 					.addEventListener("mousemove", onmousemove);
 			}
 
-			this.addEventListener("keyup", function (e) {
+			this.addEventListener("keydown", function (e) {
+				if (e.defaultPrevented) { return; }
 				if (self.readonly()) { return; }
 				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
 					if (self._optionList.hasNotClass("visible")) {
@@ -167,7 +168,7 @@
 			self.selectedItem = null;
 			self.highlightedItem = null;
 
-			self.addEventListener("keyup", function (e) {
+			self.addEventListener("keydown", function (e) {
 				if (self.readonly()) { return; }
 				var currentItem = (self.highlightedItem || self.selectedItem) || (self.getChildren().length && self.getChildren()[0]);
 				if (e.keyCode === 38 && !e.shiftKey && !e.ctrlKey && !e.metaKey) { // Up
