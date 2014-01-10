@@ -280,6 +280,11 @@
 			var self = this;
 			if (callback === undefined) {
 				self.getElement().focus();
+				if (self.addEventListener.focus) {
+					self.addEventListener.focus.forEach(function (cb) {
+						cb.call(self);
+					});
+				}
 			} else if (callback === null && this.addEventListener.focus) {
 				self.addEventListener.focus.forEach(function (cb) {
 					self.removeEventListener("focus", cb);
