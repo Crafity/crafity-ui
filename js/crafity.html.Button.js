@@ -9,9 +9,13 @@
 			var self = this;
 			this.addClass("button");
 			this.text(text);
-			this.getElement().addEventListener("click", function () {
-				if (self.disabled()) { return; }
-				self.emit("click");
+			this.attr("href", "#");
+			this.getElement().addEventListener("click", function (e) {
+				if (!self.disabled()) { 
+					self.emit("click");
+				}
+				e.preventDefault();
+				return false; 
 			});
 		}
 
