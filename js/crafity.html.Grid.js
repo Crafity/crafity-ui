@@ -64,13 +64,21 @@
 
 				var sortFunctions = {
 					ascending: function (a, b) {
-						if (a > b) { return 1; }
-						if (a < b) { return -1; }
+						if (a > b) {
+							return 1;
+						}
+						if (a < b) {
+							return -1;
+						}
 						return 0;
 					},
 					descending: function (a, b) {
-						if (a > b) { return -1; }
-						if (a < b) { return 1; }
+						if (a > b) {
+							return -1;
+						}
+						if (a < b) {
+							return 1;
+						}
 						return 0;
 					}
 				};
@@ -200,7 +208,9 @@
 					if (column.editable) {
 						instantiate = new Function("return new " + column.editable.control + "()");
 						var editControl = instantiate();
-						if (column.options) { editControl.options(column.options); }
+						if (column.options) {
+							editControl.options(column.options);
+						}
 						editControl.value(actualValue);
 						if (column.editable.events && column.editable.events.length) {
 							column.editable.events.forEach(function (event) {
@@ -239,11 +249,11 @@
 				if (!columns || !columns.length) {
 					return;
 				}
-				
+
 				_rows = rows;
 				var sortedRows = [];
 				var sorted = false;
-				
+
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				columns.some(function (column) {
