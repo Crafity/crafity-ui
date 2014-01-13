@@ -195,9 +195,10 @@
 							actualValue = moment(actualValue).format(column.format);
 						}
 					}
+					var instantiate;
 
 					if (column.editable) {
-						var instantiate = new Function("return new crafity.html." + column.editable.control + "()");
+						instantiate = new Function("return new " + column.editable.control + "()");
 						var editControl = instantiate();
 						if (column.options) { editControl.options(column.options); }
 						editControl.value(actualValue);
@@ -209,11 +210,26 @@
 								});
 							});
 						}
-
 						td.append(editControl);
+					} else if (column.clickable) {
+						instantiate = new Function("return new " + column.clickable.control + "()");
+						var clickControl = instantiate();
+						throw new Error("Not implemented");
+//						if (column.options) { clickControl.options(column.options); }
+						clickControl.text(actualValue.toString());
+//						if (column.editable.events && column.editable.events.length) {
+//							column.editable.events.forEach(function (event) {
+//								clickControl.on(event, function () {
+//									var args = Array.prototype.slice.apply(arguments);
+//									self.emit.apply(self, [event, column, row].concat(args));
+//								});
+//							});
+//						}
+						td.append(clickControl);
 					} else {
 						td.text(actualValue.toString());
 					}
+
 				});
 			};
 
