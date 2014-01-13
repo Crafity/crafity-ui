@@ -153,6 +153,20 @@
 			this.addRow = function (row) {
 				var rowElement = new html.Element("tr").appendTo(tbody).addClass("row");
 
+				function highlightRow() {
+					tbody.getChildren().forEach(function (child) {
+						child.removeClass("selected");
+					});
+					rowElement.addClass("selected");
+					self.emit("selected", row);
+				}
+				
+				rowElement.addEventListener("click", highlightRow);
+				rowElement.addEventListener("dblclick", function () {
+					highlightRow();
+					self.emit("open", row);
+				});
+
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);
 
