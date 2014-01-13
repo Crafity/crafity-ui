@@ -206,18 +206,27 @@
 			this.addRows = function (rows) {
 				this.clearRows();
 
+				if (!columns || !columns.length) {
+					return;
+				}
+				
 				_rows = rows;
 				var sortedRows = [];
-
+				var sorted = false;
+				
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				columns.some(function (column) {
 					if (column.sortable) {
+						sorted = true;
 						sortedRows = sortRowsPerColumn(column, column.sortable);
 						return true;
 					}
 					return false;
 				});
+				if (!sorted) {
+					sortedRows = rows;
+				}
 
 				// 2. add rows
 				addRows(sortedRows);
