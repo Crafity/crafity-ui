@@ -8,7 +8,7 @@
 		function ViewContainer() {
 			var self = this;
 			this.activate = function (view) {
-				self.getChildren().forEach(function (child) {
+				self.children().forEach(function (child) {
 					if (child === view) {
 						child.show();
 					} else {
@@ -18,7 +18,7 @@
 				self.append(view);
 			};
 			this.deactivateAll = function () {
-				self.getChildren().forEach(function (child) {
+				self.children().forEach(function (child) {
 					child.hide();
 				});
 			};

@@ -9,7 +9,7 @@
 			var self = this;
 			this.addClass("form");
 			this.on("readonlyChanged", function (value) {
-				this.getChildren().forEach(function (child) {
+				this.children().forEach(function (child) {
 					child.readonly(value);
 				});
 			});
@@ -22,7 +22,7 @@
 		};
 		Form.prototype.verify = function () {
 			var isValid = true;
-			this.getChildren().filter(function (child) {
+			this.children().filter(function (child) {
 				return !!child.verify;
 			}).forEach(function (child) {
 					isValid = child.verify() && isValid;
@@ -32,8 +32,8 @@
 		Form.prototype.focus = function () {
 			var self = this;
 			html.Element.prototype.focus.apply(this, arguments);
-			self.getChildren().length && self.getChildren()[0].focus();
-			self.getChildren().some(function (child) {
+			self.children().length && self.children()[0].focus();
+			self.children().some(function (child) {
 				if (!child.verify()) { child.focus(); }
 				return !child.isValid();
 			});

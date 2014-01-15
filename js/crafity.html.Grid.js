@@ -119,7 +119,7 @@
 						lastSortOrder = DESC;
 					}
 
-					headerRow.getChildren().forEach(function (thElement) {
+					headerRow.children().forEach(function (thElement) {
 						thElement.removeClass(ASC).removeClass(DESC);
 					});
 

@@ -141,7 +141,7 @@
 				self._selectedValue = value;
 				self.selectedItem = null;
 				self.highlightedItem = null;
-				self.getChildren().forEach(function (optionElement, index) {
+				self.children().forEach(function (optionElement, index) {
 					if (optionElement.attr("data-value") === (value || "").toString()) {
 						self.selectedItem = optionElement;
 						self.highlightedItem = optionElement;
@@ -170,7 +170,7 @@
 
 			self.addEventListener("keydown", function (e) {
 				if (self.readonly()) { return; }
-				var currentItem = (self.highlightedItem || self.selectedItem) || (self.getChildren().length && self.getChildren()[0]);
+				var currentItem = (self.highlightedItem || self.selectedItem) || (self.children().length && self.children()[0]);
 				if (e.keyCode === 38 && !e.shiftKey && !e.ctrlKey && !e.metaKey) { // Up
 					if (self.hasClass("visible")) {
 						var previousOption = currentItem && currentItem.previousOption;

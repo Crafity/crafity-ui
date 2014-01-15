@@ -24,28 +24,25 @@
 		}
 
 		Element.prototype = crafity.core.EventEmitter.prototype;
-		Element.prototype.getChildren = function () {
-			if (!this._children) {
-				this._children = [];
+		Element.prototype.children = function (children) {
+			if (children === undefined) {
+				return this._children = this._children || [];
 			}
-			return this._children;
-		};
-		Element.prototype.setChildren = function (children) {
 			if (this._children) {
 				this._children = children;
 			}
-			return this._children;
+			return this;
 		};
 		Element.prototype.clear = function () {
 			var self = this;
-			var children = self.getChildren();
+			var children = this.children();
 			if (!children.length) {
 				return self;
 			}
 			children.forEach(function (child) {
 				self.getElement().removeChild(child.getElement());
 			});
-			self.setChildren([]);
+			this.children([]);
 			return this;
 		};
 		Element.prototype.render = function () {
@@ -68,7 +65,7 @@
 
 			function addChild(child) {
 				if (child instanceof Element) {
-					self.setChildren([child].concat(self.getChildren()));
+					self.children([child].concat(self.children()));
 					if (self.getElement().childNodes.length > 0) {
 						self.getElement().insertBefore(child.render(), self.getElement().childNodes[0]);
 					} else {
@@ -99,7 +96,7 @@
 
 			function addChild(child) {
 				if (child instanceof Element) {
-					self.getChildren().push(child);
+					self.children().push(child);
 					self.getElement().appendChild(child.render());
 				} else {
 					throw new Error("Unexpected child to append");

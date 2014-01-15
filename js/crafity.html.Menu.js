@@ -14,7 +14,7 @@
 			var self = this;
 			this.append(menuPanel);
 			menuPanel.on("selected", function (name, menuPanel, menuItem) {
-				self.getChildren().forEach(function (mp) {
+				self.children().forEach(function (mp) {
 					if (mp !== menuPanel) {
 						mp.deselectAll();
 					}
@@ -55,7 +55,7 @@
 
 		MenuPanel.prototype = new html.Element("div");
 		MenuPanel.prototype.deselectAll = function () {
-			this._menuItems.getChildren().forEach(function (mi) {
+			this._menuItems.children().forEach(function (mi) {
 				mi.removeClass("selected");
 			});
 		};
@@ -63,7 +63,7 @@
 			var self = this;
 			this._menuItems.append(menuItem);
 			menuItem.on("click", function () {
-				self._menuItems.getChildren().forEach(function (mi) {
+				self._menuItems.children().forEach(function (mi) {
 					if (mi !== menuItem) {
 						mi.removeClass("selected");
 					}
