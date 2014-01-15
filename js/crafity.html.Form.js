@@ -37,6 +37,15 @@
 				return !child.isValid();
 			});
 		};
+		Form.prototype.data = function (data) {
+			if (data === undefined) {
+				return this._data;
+			}
+			this._data = data;
+			this.emit("dataChanged", data);
+			this.verify();
+			return this;
+		};
 		html.Form = Form;
 
 	}(crafity.html = crafity.html || {}));
