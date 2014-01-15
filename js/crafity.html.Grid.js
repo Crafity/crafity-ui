@@ -166,7 +166,7 @@
 						child.removeClass("selected");
 					});
 					rowElement.addClass("selected");
-					self.emit("selected", row);
+					self.emit("selectedGridRow", row);
 				}
 				
 				rowElement.addEventListener("click", highlightRow);

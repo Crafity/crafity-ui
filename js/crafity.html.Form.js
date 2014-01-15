@@ -38,6 +38,19 @@
 				return !child.isValid();
 			});
 		};
+		Form.prototype.clear = function(){
+			var self = this;
+			self.getChildren().forEach(function(child){
+				child.clear();
+			});
+		};
+		Form.prototype.clearFields = function(){
+				var self = this;
+				self.getChildren().forEach(function(child){
+					child.value("");
+				});
+			};
+		
 		html.Form = Form;
 
 	}(crafity.html = crafity.html || {}));
