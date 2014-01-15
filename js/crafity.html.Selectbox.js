@@ -256,6 +256,9 @@
 			return self;
 		};
 		Selectbox.OptionList.prototype.getFriendlyName = function () {
+			if (!this._options) {
+				throw new Error("Unable to get friendly name because no options are specified")
+			}
 			return this._options[this.value()];
 		};
 		Selectbox.OptionList.prototype.show = function () {
