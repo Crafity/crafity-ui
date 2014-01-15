@@ -10,7 +10,7 @@
 			this.addClass("button");
 			this.text(text);
 			this.attr("href", "#");
-			this.getElement().addEventListener("click", function (e) {
+			this.addEventListener("click", function (e) {
 				if (!self.disabled()) { 
 					self.emit("click");
 				}

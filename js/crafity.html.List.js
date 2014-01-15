@@ -66,10 +66,10 @@
 			this.append(new html.Element("div").addClass("content").text(name));
 			this.data = data;
 			this.tabindex("0");
-			this.getElement().addEventListener("click", function () {
+			this.addEventListener("click", function () {
 				self.emit("click", self);
 			});
-			this.getElement().addEventListener("focus", function () {
+			this.addEventListener("focus", function () {
 				self.emit("click", self);
 			});
 		}
