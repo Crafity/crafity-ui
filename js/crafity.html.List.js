@@ -38,9 +38,6 @@
 				});
 				listItem.select();
 			});
-			listItem.on("selected", function (listitem) {
-				self.emit("clientSelected", listitem.data);
-			});
 
 			this._listitems.push(listItem);
 			this._itemContainer.append(listItem);

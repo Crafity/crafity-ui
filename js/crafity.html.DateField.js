@@ -8,8 +8,10 @@
 
 		function DateField() {
 			var self = this;
-			this._isValid = true;
+
 			crafity.core.mixin(this, html.Field);
+
+			this._isValid = true;
 			this.addClass("datefield edit");
 			this._dateField = this._control = new html.Element("input").attr("type", "text");
 			this.append(this._dateField);

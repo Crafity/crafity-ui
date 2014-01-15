@@ -6,7 +6,6 @@
 	(function (html) {
 
 		function Form() {
-			var self = this;
 			this.addClass("form");
 			this.on("readonlyChanged", function (value) {
 				this.children().forEach(function (child) {

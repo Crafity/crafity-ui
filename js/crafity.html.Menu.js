@@ -39,7 +39,7 @@
 
 		html.Menu = Menu;
 
-		function MenuPanel(name, init) {
+		function MenuPanel(name) {
 			this.name = name;
 			this._menuItems = new html.Element("ul");
 			this.addClass("menu-panel hidden");
@@ -47,10 +47,6 @@
 				this.append(new html.Element("h2").text(name));
 			}
 			this.append(this._menuItems);
-
-			if (init) {
-				init(this.getElement());
-			}
 		}
 
 		MenuPanel.prototype = new html.Element("div");
