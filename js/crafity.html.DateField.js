@@ -15,9 +15,19 @@
 			this.append(this._dateField);
 			this.value = function (value) {
 				if (value === undefined) {
-					return this._dateField.value();
+					return this._dateField.value() && moment(this._dateField.value(), crafity.region).toDate() || null;
 				}
-				this._dateField.value(value);
+				if (typeof value === 'string') {
+					if (value === "") {
+						this._dateField.value(value);
+					} else {
+					this._dateField.value(moment(value, crafity.region).format("l"));
+					}
+				} else if (value instanceof Date) {
+					this._dateField.value(moment(value).format("l"));
+				} else {
+					throw new Error("Unknown Data type. Use a string or Date type");
+				}
 				return this;
 
 			};
