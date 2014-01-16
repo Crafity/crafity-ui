@@ -38,11 +38,11 @@
 			return this;
 		};
 
-		Form.prototype.clearFields = function () {
-			var self = this;
-			self.children().forEach(function (child) {
-				child.value("");
+		Form.prototype.reset = function () {
+			this.children().forEach(function (child) {
+				child.reset();
 			});
+			return this;
 		};
 
 		html.Form = Form;
