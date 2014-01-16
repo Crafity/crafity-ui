@@ -29,13 +29,13 @@
 			return isValid;
 		};
 		Form.prototype.focus = function () {
-			var self = this;
 			html.Element.prototype.focus.apply(this, arguments);
-			self.children().length && self.children()[0].focus();
-			self.children().some(function (child) {
+			this.children().length && this.children()[0].focus();
+			this.children().some(function (child) {
 				if (!child.verify()) { child.focus(); }
 				return !child.isValid();
 			});
+			return this;
 		};
 
 		Form.prototype.clearFields = function () {
