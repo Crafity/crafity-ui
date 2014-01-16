@@ -65,7 +65,7 @@
 				this.append(new html.Element("div").addClass("content").text(name));
 			}
 			this.tabindex("0");
-			this.addEventListener("click", function () {
+			this.addEventListener(crafity.core.events.click, function () {
 				self.emit("click", self);
 			});
 			this.addEventListener("focus", function () {
@@ -100,7 +100,7 @@
 			this.append(new html.Element("div").addClass("content").text(content));
 			this.data(data);
 			this.tabindex("0");
-			this.addEventListener("click", function () {
+			this.addEventListener(crafity.core.events.click, function () {
 				self.emit("click", self);
 			});
 			this.addEventListener("focus", function () {

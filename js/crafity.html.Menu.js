@@ -91,7 +91,7 @@
 
 			var anchor = new html.Element("a");
 			anchor.attr("href", "#" + name);
-			anchor.addEventListener("click", function (e) {
+			anchor.addEventListener(crafity.core.events.click, function (e) {
 				if (!self.disabled()) { 
 					self.emit("click");
 				}

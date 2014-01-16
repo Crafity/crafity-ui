@@ -116,7 +116,7 @@
 				}
 
 				// event handler
-				stickyTH.addEventListener("click", function () {
+				stickyTH.addEventListener(crafity.core.events.click, function () {
 
 					var lastSortOrder;
 					var newSortOrder;
@@ -169,7 +169,7 @@
 					self.emit("selectedGridRow", row);
 				}
 
-				rowElement.addEventListener("click", highlightRow);
+				rowElement.addEventListener(crafity.core.events.click, highlightRow);
 				rowElement.addEventListener("dblclick", function () {
 					highlightRow();
 					self.emit("open", row);

@@ -4,7 +4,7 @@
 	"use strict";
 
 	crafity.region = "nl";
-	
+
 	(function (core) {
 
 		core.mixin = function mixin(target, Type) {
@@ -19,6 +19,15 @@
 			return target;
 		};
 
+		core.hasTouch = function () {
+			return ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
+		};
+
+		core.events = {
+			click: core.hasTouch() ? 'touchstart' : 'click',
+			mouseup: core.hasTouch() ? 'touchend' : 'mouseup',
+			mousemove: core.hasTouch() ? 'touchmove' : 'mousemove'
+		};
 	}(crafity.core = crafity.core || {}));
 
 }(window.crafity = window.crafity || {}));

@@ -2486,7 +2486,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 	"use strict";
 
 	crafity.region = "nl";
-	
+
 	(function (core) {
 
 		core.mixin = function mixin(target, Type) {
@@ -2501,6 +2501,15 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			return target;
 		};
 
+		core.hasTouch = function () {
+			return ('ontouchstart' in window) || (window.DocumentTouch && document instanceof DocumentTouch);
+		};
+
+		core.events = {
+			click: core.hasTouch() ? 'touchstart' : 'click',
+			mouseup: core.hasTouch() ? 'touchend' : 'mouseup',
+			mousemove: core.hasTouch() ? 'touchmove' : 'mousemove'
+		};
 	}(crafity.core = crafity.core || {}));
 
 }(window.crafity = window.crafity || {}));
@@ -2771,7 +2780,6 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 		var emitter = new crafity.core.EventEmitter();
 
 		domElement.addEventListener("keydown", function (e) {
-
 			if (e.shiftKey && cmdOrCrl(e) && e.which === 77) {
 				emitter.emit("cmd+shft+m", "cmd+shft+m", e);
 			}
@@ -2792,6 +2800,9 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			}
 			if (!e.shiftKey && e.keyIdentifier === "U+001B" && e.which === 27) {
 				emitter.emit("esc", "esc", e);
+			}
+			if (!e.shiftKey && e.keyIdentifier === "U+0008" && !e.altKey && !e.metaKey && e.which === 8) {
+				emitter.emit("backspace", "backspace", e);
 			}
 			if (!e.shiftKey && e.keyIdentifier === "Enter" && e.which === 13) {
 				emitter.emit("enter", "enter", e);
@@ -2869,17 +2880,26 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 		Element.prototype.getType = function () {
 			return this._type;
 		};
+		Element.prototype.data = function (data) {
+			if (data === undefined) {
+				return this._data;
+			}
+			this._data = data;
+			this.emit("dataChanged", data);
+			return this;
+		};		
 		Element.prototype.element = function () {
 			if (!this._element) {
 				this._element = document.createElement(this.getType());
-				this._element.self = this;
-			} else if (this._element.self !== this) {
-				var _element = this._element.cloneNode();
-				delete this._element;
-				this._element = _element;
-				this._element.self = this;
-				console.log("Cloning", this._element.self, this);
-			}
+				//this._element.self = this;
+			} 
+//			else if (this._element.self !== this) {
+//				var _element = this._element; //.cloneNode();
+//				delete this._element;
+//				this._element = _element;
+//				this._element.self = this;
+//				console.log("Cloning", this._element.self, this);
+//			}
 			return this._element;
 		};
 		Element.prototype.prepend = function (children) {
@@ -3263,7 +3283,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 
 			var anchor = new html.Element("a");
 			anchor.attr("href", "#" + name);
-			anchor.addEventListener("click", function (e) {
+			anchor.addEventListener(crafity.core.events.click, function (e) {
 				if (!self.disabled()) { 
 					self.emit("click");
 				}
@@ -3456,14 +3476,14 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 				this.addClass("listitem");
 				this.append(new html.Element("div").addClass("content").text(name));
 			}
-			if (data !== undefined) { this._data = data; }
 			this.tabindex("0");
-			this.addEventListener("click", function () {
+			this.addEventListener(crafity.core.events.click, function () {
 				self.emit("click", self);
 			});
 			this.addEventListener("focus", function () {
 				self.emit("click", self);
 			});
+			this.data(data);
 		}
 
 		ListItem.prototype = new html.Element("li");
@@ -3490,9 +3510,9 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this.append(new html.Element("div").addClass("title").text(title));
 			this.append(new html.Element("div").addClass("date").text(date));
 			this.append(new html.Element("div").addClass("content").text(content));
-			this._data = data;
+			this.data(data);
 			this.tabindex("0");
-			this.addEventListener("click", function () {
+			this.addEventListener(crafity.core.events.click, function () {
 				self.emit("click", self);
 			});
 			this.addEventListener("focus", function () {
@@ -3575,13 +3595,21 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 
 				var sortFunctions = {
 					ascending: function (a, b) {
-						if (a > b) { return 1; }
-						if (a < b) { return -1; }
+						if (a > b) {
+							return 1;
+						}
+						if (a < b) {
+							return -1;
+						}
 						return 0;
 					},
 					descending: function (a, b) {
-						if (a > b) { return -1; }
-						if (a < b) { return 1; }
+						if (a > b) {
+							return -1;
+						}
+						if (a < b) {
+							return 1;
+						}
 						return 0;
 					}
 				};
@@ -3619,7 +3647,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 				}
 
 				// event handler
-				stickyTH.addEventListener("click", function () {
+				stickyTH.addEventListener(crafity.core.events.click, function () {
 
 					var lastSortOrder;
 					var newSortOrder;
@@ -3664,6 +3692,20 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this.addRow = function (row) {
 				var rowElement = new html.Element("tr").appendTo(tbody).addClass("row");
 
+				function highlightRow() {
+					tbody.children().forEach(function (child) {
+						child.removeClass("selected");
+					});
+					rowElement.addClass("selected");
+					self.emit("selectedGridRow", row);
+				}
+
+				rowElement.addEventListener(crafity.core.events.click, highlightRow);
+				rowElement.addEventListener("dblclick", function () {
+					highlightRow();
+					self.emit("open", row);
+				});
+
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);
 
@@ -3692,11 +3734,14 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 							actualValue = moment(actualValue).format(column.format);
 						}
 					}
+					var instantiate;
 
 					if (column.editable) {
-						var instantiate = new Function("return new crafity.html." + column.editable.control + "()");
+						instantiate = new Function("return new " + column.editable.control + "()");
 						var editControl = instantiate();
-						if (column.options) { editControl.options(column.options); }
+						if (column.options) {
+							editControl.options(column.options);
+						}
 						editControl.value(actualValue);
 						if (column.editable.events && column.editable.events.length) {
 							column.editable.events.forEach(function (event) {
@@ -3706,29 +3751,53 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 								});
 							});
 						}
-
 						td.append(editControl);
+					} else if (column.clickable) {
+						instantiate = new Function("return new " + column.clickable.control + "()");
+						var clickControl = instantiate();
+						throw new Error("Not implemented");
+//						if (column.options) { clickControl.options(column.options); }
+						clickControl.text(actualValue.toString());
+//						if (column.editable.events && column.editable.events.length) {
+//							column.editable.events.forEach(function (event) {
+//								clickControl.on(event, function () {
+//									var args = Array.prototype.slice.apply(arguments);
+//									self.emit.apply(self, [event, column, row].concat(args));
+//								});
+//							});
+//						}
+						td.append(clickControl);
 					} else {
 						td.text(actualValue.toString());
 					}
+
 				});
 			};
 
 			this.addRows = function (rows) {
 				this.clearRows();
 
+				if (!columns || !columns.length) {
+					return;
+				}
+
 				_rows = rows;
 				var sortedRows = [];
+				var sorted = false;
 
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				columns.some(function (column) {
 					if (column.sortable) {
+						sorted = true;
 						sortedRows = sortRowsPerColumn(column, column.sortable);
 						return true;
 					}
 					return false;
 				});
+				if (!sorted) {
+					sortedRows = rows;
+				}
 
 				// 2. add rows
 				addRows(sortedRows);
@@ -3782,7 +3851,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this.addClass("button");
 			this.text(text);
 			this.attr("href", "#");
-			this.addEventListener("click", function (e) {
+			this.addEventListener(crafity.core.events.click, function (e) {
 				if (!self.disabled()) { 
 					self.emit("click");
 				}
@@ -3829,23 +3898,22 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			return isValid;
 		};
 		Form.prototype.focus = function () {
-			var self = this;
 			html.Element.prototype.focus.apply(this, arguments);
-			self.children().length && self.children()[0].focus();
-			self.children().some(function (child) {
+			this.children().length && this.children()[0].focus();
+			this.children().some(function (child) {
 				if (!child.verify()) { child.focus(); }
 				return !child.isValid();
 			});
-		};
-		Form.prototype.data = function (data) {
-			if (data === undefined) {
-				return this._data;
-			}
-			this._data = data;
-			this.emit("dataChanged", data);
-			this.verify();
 			return this;
 		};
+
+		Form.prototype.reset = function () {
+			this.children().forEach(function (child) {
+				child.reset();
+			});
+			return this;
+		};
+
 		html.Form = Form;
 
 	}(crafity.html = crafity.html || {}));
@@ -3903,6 +3971,12 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 				throw new Error("Unable to register change event, because no _control has been assigned");
 			}
 			this._control.change(callback);
+			return this;
+		};
+		Field.prototype.reset = function () {
+			this.removeClass("invalid");
+			this._isValid = undefined; 
+			this.value("");
 			return this;
 		};
 		Field.prototype.verify = function () {
