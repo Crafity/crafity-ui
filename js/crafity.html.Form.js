@@ -37,6 +37,7 @@
 				return !child.isValid();
 			});
 		};
+
 		Form.prototype.data = function (data) {
 			if (data === undefined) {
 				return this._data;
@@ -46,6 +47,14 @@
 			this.verify();
 			return this;
 		};
+
+		Form.prototype.clearFields = function () {
+			var self = this;
+			self.children().forEach(function (child) {
+				child.value("");
+			});
+		};
+
 		html.Form = Form;
 
 	}(crafity.html = crafity.html || {}));
