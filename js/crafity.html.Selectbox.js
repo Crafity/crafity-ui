@@ -9,7 +9,7 @@
 		function Selectbox() {
 			var self = this;
 
-			this._selectedValue = new html.Element("span").text(EMPTY_SELECT_VALUE).addClass("needsclick");
+			this._selectedValue = new html.Element("span").text(EMPTY_SELECT_VALUE);
 			this.append(this._selectedValue);
 
 			this._optionList = new Selectbox.OptionList();
@@ -18,7 +18,7 @@
 			this._mouseInfo = this._optionList._mouseInfo;
 
 			this._options = [];
-			this.addClass("selectbox needsclick edit collapsed");
+			this.addClass("selectbox edit collapsed");
 			this.tabindex("0");
 
 			this._optionList
