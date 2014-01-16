@@ -14,10 +14,9 @@
 				return new Element(type);
 			}
 			if (typeof type === "string") {
-				this._element = null;
+				//this._element = null;
 				this._type = type;
 			} else {
-				window.type = type;
 				this._type = type.tagName;
 				this._element = type;
 			}
@@ -40,20 +39,27 @@
 				return self;
 			}
 			children.forEach(function (child) {
-				self.getElement().removeChild(child.getElement());
+				self.element().removeChild(child.element());
 			});
 			this.children([]);
 			return this;
 		};
 		Element.prototype.render = function () {
-			return this.getElement();
+			return this.element();
 		};
 		Element.prototype.getType = function () {
 			return this._type;
 		};
-		Element.prototype.getElement = function () {
+		Element.prototype.element = function () {
 			if (!this._element) {
 				this._element = document.createElement(this.getType());
+				this._element.self = this;
+			} else if (this._element.self !== this) {
+				var _element = this._element.cloneNode();
+				delete this._element;
+				this._element = _element;
+				this._element.self = this;
+				console.log("Cloning", this._element.self, this);
 			}
 			return this._element;
 		};
@@ -66,10 +72,10 @@
 			function addChild(child) {
 				if (child instanceof Element) {
 					self.children([child].concat(self.children()));
-					if (self.getElement().childNodes.length > 0) {
-						self.getElement().insertBefore(child.render(), self.getElement().childNodes[0]);
+					if (self.element().childNodes.length > 0) {
+						self.element().insertBefore(child.render(), self.element().childNodes[0]);
 					} else {
-						self.getElement().appendChild(child.render());
+						self.element().appendChild(child.render());
 					}
 				} else {
 					throw new Error("Unexpected child to append");
@@ -97,7 +103,7 @@
 			function addChild(child) {
 				if (child instanceof Element) {
 					self.children().push(child);
-					self.getElement().appendChild(child.render());
+					self.element().appendChild(child.render());
 				} else {
 					throw new Error("Unexpected child to append");
 				}
@@ -121,7 +127,7 @@
 			return this;
 		};
 		Element.prototype.addClass = function (classNames) {
-			var classString = this.getElement().getAttribute("class");
+			var classString = this.element().getAttribute("class");
 			var classes = (classString && classString.length && classString.split(" ")) || [];
 			var classesToAdd = classNames.split(" ");
 			classesToAdd.forEach(function (classToAdd) {
@@ -130,22 +136,22 @@
 				}
 				classes.push(classToAdd);
 			});
-			this.getElement().setAttribute("class", classes.join(" "));
+			this.element().setAttribute("class", classes.join(" "));
 			return this;
 		};
 		Element.prototype.attr = function (name, value) {
 			if (value === undefined) {
-				return this.getElement().getAttribute(name);
+				return this.element().getAttribute(name);
 			}
 			if (value === null) {
-				this.getElement().removeAttribute(name);
+				this.element().removeAttribute(name);
 			} else {
-				this.getElement().setAttribute(name, value);
+				this.element().setAttribute(name, value);
 			}
 			return this;
 		};
 		Element.prototype.hasClass = function (classNames) {
-			var classes = (this.getElement().getAttribute("class") || "").split(" ");
+			var classes = (this.element().getAttribute("class") || "").split(" ");
 			var classesToCheck = classNames.split(" ");
 			if (classesToCheck.length === 0) {
 				return false;
@@ -161,7 +167,7 @@
 			return !this.hasClass(classNames);
 		};
 		Element.prototype.removeClass = function (classNames) {
-			var classString = this.getElement().getAttribute("class");
+			var classString = this.element().getAttribute("class");
 			var classes = (classString && classString.length && classString.split(" ")) || [];
 			var classesToAdd = classNames.split(" ");
 			classesToAdd.forEach(function (classToAdd) {
@@ -171,12 +177,12 @@
 				}
 				classes.splice(index, 1);
 			});
-			this.getElement().setAttribute("class", classes.join(" "));
+			this.element().setAttribute("class", classes.join(" "));
 			return this;
 		};
 		Element.prototype.toggleClass = function (classNames) {
 			var self = this;
-			//var classes = (this.getElement().getAttribute("class") || "").split(" ");
+			//var classes = (this.element().getAttribute("class") || "").split(" ");
 			var classesToAdd = classNames.split(" ");
 			classesToAdd.forEach(function (classToAdd) {
 				if (self.hasClass(classToAdd)) {
@@ -236,24 +242,24 @@
 		};
 		Element.prototype.text = function (text) {
 			if (text) {
-				this.getElement().textContent = text;
+				this.element().textContent = text;
 				return this;
 			}
-			return this.getElement().textContent;
+			return this.element().textContent;
 		};
 		Element.prototype.html = function (html) {
 			if (html) {
-				this.getElement().innerHTML = html;
+				this.element().innerHTML = html;
 				return this;
 			}
-			return this.getElement().innerHTML;
+			return this.element().innerHTML;
 		};
 		Element.prototype.value = function (value) {
 			if (value !== undefined) {
-				this.getElement().value = value;
+				this.element().value = value;
 				return this;
 			}
-			return this.getElement().value;
+			return this.element().value;
 		};
 		Element.prototype.change = function (callback) {
 			var self = this;
@@ -278,7 +284,7 @@
 		Element.prototype.focus = function (callback) {
 			var self = this;
 			if (callback === undefined) {
-				self.getElement().focus();
+				self.element().focus();
 				if (self.addEventListener.focus) {
 					self.addEventListener.focus.forEach(function (cb) {
 						cb.call(self);
@@ -319,7 +325,7 @@
 
 		Element.prototype.id = function (id) {
 			if (id) {
-				this.getElement().setAttribute("id", id);
+				this.element().setAttribute("id", id);
 				return this;
 			}
 			return this.getAttribute("id");
@@ -332,11 +338,11 @@
 			}
 		};
 		Element.prototype.addEventListener = function () {
-			this.getElement().addEventListener.apply(this.getElement(), arguments);
+			this.element().addEventListener.apply(this.element(), arguments);
 			return this;
 		};
 		Element.prototype.removeEventListener = function () {
-			this.getElement().removeEventListener.apply(this.getElement(), arguments);
+			this.element().removeEventListener.apply(this.element(), arguments);
 			return this;
 		};
 		html.Element = Element;

@@ -67,7 +67,7 @@
 				self._optionList.show();
 
 				// Now see if the top and the bottom of the options list fits on the screen
-				var optionListElement = self._optionList.getElement();
+				var optionListElement = self._optionList.element();
 				var rects = optionListElement.getClientRects();
 				if (rects.length) {
 					var top = rects[0].top;
@@ -100,7 +100,7 @@
 			this.addEventListener("keydown", function (e) {
 				if (e.defaultPrevented) { return; }
 				if (self.readonly()) { return; }
-				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
+				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.element() || e.target === undefined)) {
 					if (self._optionList.hasNotClass("visible")) {
 						highlightSelectedItem(self._optionList);
 						showOptionList(e);
@@ -146,7 +146,7 @@
 						self.selectedItem = optionElement;
 						self.highlightedItem = optionElement;
 						optionElement.addClass("selected");
-						self.getElement().style.marginTop = -1 * (16 + 2) * index + "px";
+						self.element().style.marginTop = -1 * (16 + 2) * index + "px";
 					} else {
 						optionElement.removeClass("selected");
 					}
@@ -200,7 +200,7 @@
 						return false;
 					}
 				}
-				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.getElement() || e.target === undefined)) {
+				if ((e.keyCode === 13 || e.keyCode === 32) && !e.shiftKey && !e.ctrlKey && !e.metaKey && (e.target === self.element() || e.target === undefined)) {
 					self.hide().emit("selected", currentItem.attr("data-value"));
 					e.preventDefault();
 					return false;
@@ -250,7 +250,7 @@
 					self.selectedItem = element;
 					self.highlightedItem = element;
 					element.addClass("selected").addClass("hover");
-					self.getElement().style.marginTop = -1 * (16 + 2) * index + "px";
+					self.element().style.marginTop = -1 * (16 + 2) * index + "px";
 				}
 			});
 			return self;

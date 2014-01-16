@@ -50,7 +50,7 @@
 				});
 			},
 			attach: function (element) {
-				return attach(element.getElement && element.getElement() || element);
+				return attach(element.element && element.element() || element);
 			}
 		};
 	}
