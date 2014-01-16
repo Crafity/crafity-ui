@@ -59,9 +59,12 @@
 
 		function ListItem(name, data) {
 			var self = this;
-			this.addClass("ListItem");
-			this.append(new html.Element("div").addClass("content").text(name));
-			this.data = data;
+
+			if (name !== undefined) {
+				this.addClass("listitem");
+				this.append(new html.Element("div").addClass("content").text(name));
+			}
+			if (data !== undefined) { this._data = data; }
 			this.tabindex("0");
 			this.addEventListener("click", function () {
 				self.emit("click", self);
@@ -88,6 +91,28 @@
 			return this;
 		};
 		html.ListItem = ListItem;
+
+		function MultiLineListItem(title, date, content, data) {
+			var self = this;
+			this.addClass("multiline listitem");
+			this.append(new html.Element("div").addClass("title").text(title));
+			this.append(new html.Element("div").addClass("date").text(date));
+			this.append(new html.Element("div").addClass("content").text(content));
+			this._data = data;
+			this.tabindex("0");
+			this.addEventListener("click", function () {
+				self.emit("click", self);
+			});
+			this.addEventListener("focus", function () {
+				self.emit("click", self);
+			});
+			
+		}
+
+		MultiLineListItem.prototype = Object.create(ListItem.prototype);
+		MultiLineListItem.prototype.constructor = MultiLineListItem;
+
+		html.MultiLineListItem = MultiLineListItem;
 
 	}(crafity.html = crafity.html || {}));
 
