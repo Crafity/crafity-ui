@@ -286,7 +286,31 @@ little-arrow-size=3px
 				color: #0061FF
 				.content
 					border-bottom: 0px solid white
-
+			&.multiline
+				overflow: hidden
+				height: initial
+				&.selected
+					background-color: #3875D7
+					color: white
+					.content
+						color: #ccc
+					.date
+						color: white
+				.title
+					font-weight: 500
+					padding: 5px 0 0
+					margin: 0 0 0 10px
+					float: left
+				.date
+					padding: 5px 0 0
+					margin: 0 10px 0 0
+					float: right
+					color:  #4787FF
+				.content
+					clear: both
+					font-weight: 200
+					padding: 5px 0
+					color: gray
 .buttonBar
 	height: 25px
 	padding: 0 20px 10px
