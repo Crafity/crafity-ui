@@ -50,6 +50,14 @@
 		Element.prototype.getType = function () {
 			return this._type;
 		};
+		Element.prototype.data = function (data) {
+			if (data === undefined) {
+				return this._data;
+			}
+			this._data = data;
+			this.emit("dataChanged", data);
+			return this;
+		};		
 		Element.prototype.element = function () {
 			if (!this._element) {
 				this._element = document.createElement(this.getType());

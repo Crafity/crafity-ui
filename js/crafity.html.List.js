@@ -64,7 +64,6 @@
 				this.addClass("listitem");
 				this.append(new html.Element("div").addClass("content").text(name));
 			}
-			if (data !== undefined) { this._data = data; }
 			this.tabindex("0");
 			this.addEventListener("click", function () {
 				self.emit("click", self);
@@ -72,6 +71,7 @@
 			this.addEventListener("focus", function () {
 				self.emit("click", self);
 			});
+			this.data(data);
 		}
 
 		ListItem.prototype = new html.Element("li");
@@ -98,7 +98,7 @@
 			this.append(new html.Element("div").addClass("title").text(title));
 			this.append(new html.Element("div").addClass("date").text(date));
 			this.append(new html.Element("div").addClass("content").text(content));
-			this._data = data;
+			this.data(data);
 			this.tabindex("0");
 			this.addEventListener("click", function () {
 				self.emit("click", self);

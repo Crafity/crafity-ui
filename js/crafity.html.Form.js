@@ -38,16 +38,6 @@
 			});
 		};
 
-		Form.prototype.data = function (data) {
-			if (data === undefined) {
-				return this._data;
-			}
-			this._data = data;
-			this.emit("dataChanged", data);
-			this.verify();
-			return this;
-		};
-
 		Form.prototype.clearFields = function () {
 			var self = this;
 			self.children().forEach(function (child) {
