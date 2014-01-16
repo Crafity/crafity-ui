@@ -105,7 +105,7 @@
 		};
 		Element.prototype.append = function (children) {
 			if (!children) {
-				return this;
+				throw new Error("Argument 'children' is required");
 			}
 			var self = this;
 
@@ -130,7 +130,7 @@
 		};
 		Element.prototype.appendTo = function (parent) {
 			if (!parent) {
-				return this;
+				throw new Error("Argument 'parent' is required");
 			}
 			parent.append(this);
 			return this;
