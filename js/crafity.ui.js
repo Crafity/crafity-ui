@@ -2887,19 +2887,11 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this._data = data;
 			this.emit("dataChanged", data);
 			return this;
-		};		
+		};
 		Element.prototype.element = function () {
 			if (!this._element) {
 				this._element = document.createElement(this.getType());
-				//this._element.self = this;
-			} 
-//			else if (this._element.self !== this) {
-//				var _element = this._element; //.cloneNode();
-//				delete this._element;
-//				this._element = _element;
-//				this._element.self = this;
-//				console.log("Cloning", this._element.self, this);
-//			}
+			}
 			return this._element;
 		};
 		Element.prototype.prepend = function (children) {
@@ -2935,7 +2927,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 		};
 		Element.prototype.append = function (children) {
 			if (!children) {
-				return this;
+				throw new Error("Argument 'children' is required");
 			}
 			var self = this;
 
@@ -2960,7 +2952,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 		};
 		Element.prototype.appendTo = function (parent) {
 			if (!parent) {
-				return this;
+				throw new Error("Argument 'parent' is required");
 			}
 			parent.append(this);
 			return this;
@@ -4479,6 +4471,23 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 
 		};
 		html.Selectbox = Selectbox;
+
+	}(crafity.html = crafity.html || {}));
+
+}(window.crafity = window.crafity || {}));
+/*jslint browser: true, nomen: true, vars: true, white: true*/
+
+(function (crafity) {
+	"use strict";
+
+	(function (html) {
+		var EMPTY_SELECT_VALUE = " ";
+		
+		function MultiSelectbox() {
+			var self = this;
+		}
+		
+		html.MultiSelectbox = MultiSelectbox;
 
 	}(crafity.html = crafity.html || {}));
 
