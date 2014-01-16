@@ -177,7 +177,7 @@
 					return false;
 				}
 
-				rowElement.attr("tabindex", 0);
+				rowElement.attr("tabindex", -1);
 				crafity.keyboard.attach(rowElement).on("enter", open);
 				rowElement.addEventListener("dblclick", open);
 

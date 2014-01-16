@@ -3708,7 +3708,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 					return false;
 				}
 
-				rowElement.attr("tabindex", 0);
+				rowElement.attr("tabindex", -1);
 				crafity.keyboard.attach(rowElement).on("enter", open);
 				rowElement.addEventListener("dblclick", open);
 
