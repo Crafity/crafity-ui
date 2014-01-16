@@ -57,19 +57,11 @@
 			this._data = data;
 			this.emit("dataChanged", data);
 			return this;
-		};		
+		};
 		Element.prototype.element = function () {
 			if (!this._element) {
 				this._element = document.createElement(this.getType());
-				//this._element.self = this;
-			} 
-//			else if (this._element.self !== this) {
-//				var _element = this._element; //.cloneNode();
-//				delete this._element;
-//				this._element = _element;
-//				this._element.self = this;
-//				console.log("Cloning", this._element.self, this);
-//			}
+			}
 			return this._element;
 		};
 		Element.prototype.prepend = function (children) {
