@@ -64,13 +64,21 @@
 
 				var sortFunctions = {
 					ascending: function (a, b) {
-						if (a > b) { return 1; }
-						if (a < b) { return -1; }
+						if (a > b) {
+							return 1;
+						}
+						if (a < b) {
+							return -1;
+						}
 						return 0;
 					},
 					descending: function (a, b) {
-						if (a > b) { return -1; }
-						if (a < b) { return 1; }
+						if (a > b) {
+							return -1;
+						}
+						if (a < b) {
+							return 1;
+						}
 						return 0;
 					}
 				};
@@ -153,6 +161,20 @@
 			this.addRow = function (row) {
 				var rowElement = new html.Element("tr").appendTo(tbody).addClass("row");
 
+				function highlightRow() {
+					tbody.children().forEach(function (child) {
+						child.removeClass("selected");
+					});
+					rowElement.addClass("selected");
+					self.emit("selectedGridRow", row);
+				}
+
+				rowElement.addEventListener("click", highlightRow);
+				rowElement.addEventListener("dblclick", function () {
+					highlightRow();
+					self.emit("open", row);
+				});
+
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);
 
@@ -181,11 +203,14 @@
 							actualValue = moment(actualValue).format(column.format);
 						}
 					}
+					var instantiate;
 
 					if (column.editable) {
-						var instantiate = new Function("return new crafity.html." + column.editable.control + "()");
+						instantiate = new Function("return new " + column.editable.control + "()");
 						var editControl = instantiate();
-						if (column.options) { editControl.options(column.options); }
+						if (column.options) {
+							editControl.options(column.options);
+						}
 						editControl.value(actualValue);
 						if (column.editable.events && column.editable.events.length) {
 							column.editable.events.forEach(function (event) {
@@ -195,29 +220,53 @@
 								});
 							});
 						}
-
 						td.append(editControl);
+					} else if (column.clickable) {
+						instantiate = new Function("return new " + column.clickable.control + "()");
+						var clickControl = instantiate();
+						throw new Error("Not implemented");
+//						if (column.options) { clickControl.options(column.options); }
+						clickControl.text(actualValue.toString());
+//						if (column.editable.events && column.editable.events.length) {
+//							column.editable.events.forEach(function (event) {
+//								clickControl.on(event, function () {
+//									var args = Array.prototype.slice.apply(arguments);
+//									self.emit.apply(self, [event, column, row].concat(args));
+//								});
+//							});
+//						}
+						td.append(clickControl);
 					} else {
 						td.text(actualValue.toString());
 					}
+
 				});
 			};
 
 			this.addRows = function (rows) {
 				this.clearRows();
 
+				if (!columns || !columns.length) {
+					return;
+				}
+
 				_rows = rows;
 				var sortedRows = [];
+				var sorted = false;
 
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				columns.some(function (column) {
 					if (column.sortable) {
+						sorted = true;
 						sortedRows = sortRowsPerColumn(column, column.sortable);
 						return true;
 					}
 					return false;
 				});
+				if (!sorted) {
+					sortedRows = rows;
+				}
 
 				// 2. add rows
 				addRows(sortedRows);

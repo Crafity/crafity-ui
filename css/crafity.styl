@@ -368,6 +368,24 @@ little-arrow-size=3px
 	bottom: 0
 	overflow-x: hidden;
 	overflow-y: auto;
+	selection(important=)
+		color: white important
+		border-top: 1px solid #587FEE important;
+		border-bottom: 1px solid #0D52EB important;
+		background: #587FEE
+		/***  CSS Gradient  ***/
+		/*  Chrome 1-9 and Safari 4-5.0  */
+		background-image: -webkit-gradient(linear, left top, left bottom, color-stop( 0.0, #587FEE ), color-stop( 1.0, #2361F5 )) important;
+		/*  Chrome 10+ Safari 5.1+ Mobile Safari  */
+		background-image: -webkit-linear-gradient(top, #587FEE, #2361F5 ) important;
+		/*  Firefox 3.6+  */
+		background-image: -moz-linear-gradient(top, #587FEE, #2361F5 ) important;
+		/*  IE 10+  */
+		background-image: -ms-linear-gradient(top, #587FEE, #2361F5 ) important;
+		/*  Opera 11.10+  */
+		background-image: -o-linear-gradient(top, #587FEE, #2361F5 ) important;
+		/*  W3C  */
+		background-image: linear-gradient(top, #587FEE, #2361F5 ) important;	
 	.container
 		height: 100%
 		overflow-x: hidden;
@@ -431,12 +449,20 @@ little-arrow-size=3px
 						z-index: -2
 		.row
 			background: white
+			position: relative
+			&.selected
+				selection(!important)
+				.cell,
+				.cell:nth-child(1),
+				.cell:nth-child(1) *
+					color: white
 			&.top-spacer
 				height: 2em
 				background: white
 			&:nth-child(even)
 				background: #F6F7F9
 			.cell
+				position: relative
 				min-width: 80px;
 				white-space: pre
 				padding: 0 15px 0 15px
