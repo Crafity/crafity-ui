@@ -12,7 +12,6 @@
 		var emitter = new crafity.core.EventEmitter();
 
 		domElement.addEventListener("keydown", function (e) {
-
 			if (e.shiftKey && cmdOrCrl(e) && e.which === 77) {
 				emitter.emit("cmd+shft+m", "cmd+shft+m", e);
 			}
@@ -33,6 +32,9 @@
 			}
 			if (!e.shiftKey && e.keyIdentifier === "U+001B" && e.which === 27) {
 				emitter.emit("esc", "esc", e);
+			}
+			if (!e.shiftKey && e.keyIdentifier === "U+0008" && !e.altKey && !e.metaKey && e.which === 8) {
+				emitter.emit("backspace", "backspace", e);
 			}
 			if (!e.shiftKey && e.keyIdentifier === "Enter" && e.which === 13) {
 				emitter.emit("enter", "enter", e);
