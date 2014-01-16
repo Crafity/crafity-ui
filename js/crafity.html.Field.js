@@ -52,6 +52,12 @@
 			this._control.change(callback);
 			return this;
 		};
+		Field.prototype.reset = function () {
+			this.removeClass("invalid");
+			this._isValid = undefined; 
+			this.value("");
+			return this;
+		};
 		Field.prototype.verify = function () {
 			if (this.isValid()) {
 				this.removeClass("invalid");
