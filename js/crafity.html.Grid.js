@@ -22,7 +22,7 @@
 			var DESC = "descending";
 
 			var _rows = null;
-
+			
 			var keys = {};
 			container.addEventListener("keydown",
 				function (e) {
@@ -170,10 +170,16 @@
 				}
 
 				rowElement.addEventListener(crafity.core.events.click, highlightRow);
-				rowElement.addEventListener("dblclick", function () {
+				function open(key, e) {
 					highlightRow();
 					self.emit("open", row);
-				});
+					e.preventDefault();
+					return false;
+				}
+
+				rowElement.attr("tabindex", 0);
+				crafity.keyboard.attach(rowElement).on("enter", open);
+				rowElement.addEventListener("dblclick", open);
 
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);

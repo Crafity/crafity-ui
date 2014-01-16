@@ -3553,7 +3553,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			var DESC = "descending";
 
 			var _rows = null;
-
+			
 			var keys = {};
 			container.addEventListener("keydown",
 				function (e) {
@@ -3701,10 +3701,16 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 				}
 
 				rowElement.addEventListener(crafity.core.events.click, highlightRow);
-				rowElement.addEventListener("dblclick", function () {
+				function open(key, e) {
 					highlightRow();
 					self.emit("open", row);
-				});
+					e.preventDefault();
+					return false;
+				}
+
+				rowElement.attr("tabindex", 0);
+				crafity.keyboard.attach(rowElement).on("enter", open);
+				rowElement.addEventListener("dblclick", open);
 
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);
