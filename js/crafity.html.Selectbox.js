@@ -18,7 +18,7 @@
 			this._mouseInfo = this._optionList._mouseInfo;
 
 			this._options = [];
-			this.addClass("selectbox edit collapsed");
+			this.addClass("single selectbox edit collapsed");
 			this.tabindex("0");
 
 			this._optionList
