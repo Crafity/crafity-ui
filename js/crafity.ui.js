@@ -4207,7 +4207,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 			this._mouseInfo = this._optionList._mouseInfo;
 
 			this._options = [];
-			this.addClass("selectbox edit collapsed");
+			this.addClass("single selectbox edit collapsed");
 			this.tabindex("0");
 
 			this._optionList
@@ -4485,9 +4485,95 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 		
 		function MultiSelectbox() {
 			var self = this;
+
+			this._selectedValue = new html.Element("span").text(EMPTY_SELECT_VALUE);
+			this.append(this._selectedValue);
+
+			this._optionList = new html.Element("div");
+			this.append(this._optionList);
+			
+			this._options = [];
+			this.addClass("multi selectbox edit");
+			this.tabindex("0");
+
+			this.on("readonlyChanged", function (bool) {
+				if (bool === true) {
+					self.removeClass("edit").addClass("readonly").tabindex("-1");
+				}
+				if (bool === false) {
+					self.addClass("edit").removeClass("readonly").tabindex(null);
+				}
+			});
 		}
 		
+		MultiSelectbox.prototype = new html.Element("div");
+		MultiSelectbox.prototype.options = function (options) {
+			var self = this;
+			if (options === undefined) {
+				//return self._optionList.options();
+				return self;
+			}
+			Object.keys(options).forEach(function (key) {
+				self.append(new html.Element("div").text(options[key]));
+			});
+			//self._optionList.options(options);
+			return self;
+
+		};
 		html.MultiSelectbox = MultiSelectbox;
+
+	}(crafity.html = crafity.html || {}));
+
+}(window.crafity = window.crafity || {}));
+/*jslint browser: true, nomen: true, vars: true, white: true*/
+
+(function (crafity) {
+	"use strict";
+
+	(function (html) {
+
+		function MultiSelectField() {
+			var self = this;
+			crafity.core.mixin(this, html.Field);
+
+			this.addClass("multi selectfield edit");
+			this._multiSelectbox = this._control = new html.MultiSelectbox();
+			this._multiSelectbox.on("selected", function (value) {
+				self.verify();
+				self.emit("selected", value);
+			});
+
+			this.options = function (options) {
+				if (options === undefined) {
+					return this._multiSelectbox.options();
+				}
+				this._multiSelectbox.options(options);
+				return this;
+			};
+
+			this.append(this._multiSelectbox);
+
+			this._isreadonly = false;
+			this.readonly = function (bool) {
+				if (bool === true) {
+					self.removeClass("edit").addClass("readonly");
+					self._multiSelectbox.readonly(true);
+					self._multiSelectbox.tabindex("-1");
+					self._isreadonly = bool;
+				} else if (bool === false) {
+					self.addClass("edit").removeClass("readonly");
+					self._multiSelectbox.readonly(false);
+					self._multiSelectbox.tabindex("0");
+					self._isreadonly = bool;
+				} else {
+					return self._isreadonly;
+				}
+				return self;
+			};
+		}
+
+		MultiSelectField.prototype = new html.Element("div");
+		html.MultiSelectField = MultiSelectField;
 
 	}(crafity.html = crafity.html || {}));
 
