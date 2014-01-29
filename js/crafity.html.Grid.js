@@ -173,7 +173,7 @@
 				function open(key, e) {
 					highlightRow();
 					self.emit("open", row);
-					e.preventDefault();
+					e && e.preventDefault();
 					return false;
 				}
 

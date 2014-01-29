@@ -3696,7 +3696,7 @@ function(){var a={1:"'inci",5:"'inci",8:"'inci",70:"'inci",80:"'inci",2:"'nci",7
 				function open(key, e) {
 					highlightRow();
 					self.emit("open", row);
-					e.preventDefault();
+					e && e.preventDefault();
 					return false;
 				}
 
