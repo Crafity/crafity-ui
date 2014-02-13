@@ -51,6 +51,9 @@
 					emitter.on(shortcut, callback);
 				});
 			},
+			removeAllListeners: function () {
+				emitter.removeAllListeners();
+			},
 			attach: function (element) {
 				return attach(element.element && element.element() || element);
 			}
