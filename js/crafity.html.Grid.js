@@ -20,9 +20,10 @@
 			var EMPTY_VALUE = " ";
 			var ASC = "ascending";
 			var DESC = "descending";
+			var sortHandler = null;
 
 			var _rows = null;
-			
+
 			var keys = {};
 			container.addEventListener("keydown",
 				function (e) {
@@ -113,37 +114,41 @@
 
 				if (column.sortable) {
 					th.addClass(column.sortable); // asc or desc
+
+					// event handler
+					stickyTH.addEventListener(crafity.core.events.click, function () {
+						var lastSortOrder;
+						var newSortOrder;
+
+						if (th.hasClass(ASC)) {
+							lastSortOrder = ASC;
+						} else if (th.hasClass(DESC)) {
+							lastSortOrder = DESC;
+						}
+
+						headerRow.children().forEach(function (thElement) {
+							thElement.removeClass(ASC).removeClass(DESC);
+						});
+
+						if (lastSortOrder === ASC) {
+							th.addClass(newSortOrder = DESC);
+						} else if (lastSortOrder === DESC) {
+							th.addClass(newSortOrder = ASC);
+						} else {
+							th.addClass(newSortOrder = ASC); // default
+						}
+
+						if (sortHandler) {
+							return sortHandler({ column: column, order: newSortOrder });
+						}
+
+						var sortedRows = sortRowsPerColumn(column, newSortOrder);
+						self.clearRows();
+						addRows(sortedRows);
+
+					});
 				}
 
-				// event handler
-				stickyTH.addEventListener(crafity.core.events.click, function () {
-
-					var lastSortOrder;
-					var newSortOrder;
-
-					if (th.hasClass(ASC)) {
-						lastSortOrder = ASC;
-					} else if (th.hasClass(DESC)) {
-						lastSortOrder = DESC;
-					}
-
-					headerRow.children().forEach(function (thElement) {
-						thElement.removeClass(ASC).removeClass(DESC);
-					});
-
-					if (lastSortOrder === ASC) {
-						th.addClass(newSortOrder = DESC);
-					} else if (lastSortOrder === DESC) {
-						th.addClass(newSortOrder = ASC);
-					} else {
-						th.addClass(newSortOrder = ASC); // default
-					}
-
-					var sortedRows = sortRowsPerColumn(column, newSortOrder);
-					self.clearRows();
-					addRows(sortedRows);
-
-				});
 				th.addClass("column").appendTo(headerRow);
 			};
 
@@ -284,6 +289,11 @@
 			};
 
 			this.clearRows();
+
+			this.onsort = function (handler) {
+				sortHandler = handler;
+				return this;
+			};
 
 			if (columns) {
 				this.addColumns(columns);
