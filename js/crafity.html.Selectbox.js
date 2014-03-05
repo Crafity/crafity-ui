@@ -66,20 +66,34 @@
 				self.addClass("expanded").removeClass("collapsed");
 				self._optionList.show();
 
-				// Now see if the top and the bottom of the options list fits on the screen
 				var optionListElement = self._optionList.element();
-				var rects = optionListElement.getClientRects();
-				if (rects.length) {
-					var top = rects[0].top;
-					var bottom = rects[0].top + rects[0].height;
-					var marginTop = optionListElement.style.marginTop.replace(/px$/i, "");
-					if (top < 0) {
-						optionListElement.style.marginTop = (parseInt(marginTop, 10) - top) + "px";
+
+				setTimeout(function () {
+
+					// Now see if the top and the bottom of the options list fits on the screen
+					var rects = optionListElement.getClientRects();
+					if (rects.length) {
+						var top = rects[0].top;
+						var bottom = rects[0].top + rects[0].height;
+						var marginTop = optionListElement.style.marginTop.replace(/px$/i, "");
+						console.log("top", top);
+						if (top < 0) {
+							optionListElement.style.marginTop = (parseInt(marginTop, 10) - top) + "px";
+						}
+						if (bottom > window.innerHeight) {
+							optionListElement.style.marginTop = parseInt(marginTop, 10) - (bottom - window.innerHeight) + "px";
+						}
 					}
-					if (bottom > window.innerHeight) {
-						optionListElement.style.marginTop = parseInt(marginTop, 10) - (bottom - window.innerHeight) + "px";
-					}
+
+				}, 0);
+
+				var selectedValueRects = self._selectedValue.element().getClientRects();
+				if (!selectedValueRects.length) {
+					throw new Error("Selected value element does not support getClientRects");
 				}
+				optionListElement.style.left = selectedValueRects[0].left + "px";
+				optionListElement.style.top = selectedValueRects[0].top + "px";
+
 				e.preventDefault();
 				return false;
 			}
@@ -146,7 +160,7 @@
 						self.selectedItem = optionElement;
 						self.highlightedItem = optionElement;
 						optionElement.addClass("selected");
-						self.element().style.marginTop = -1 * (16 + 2) * index + "px";
+						self.element().style.marginTop = -1 * (8 + (18 * index)) + "px";
 					} else {
 						optionElement.removeClass("selected");
 					}
@@ -239,7 +253,17 @@
 					e.preventDefault();
 					return false;
 				});
-				element.addEventListener("mouseup", function () {
+				element.addEventListener("mouseup", function (e) {
+					if (self._mouseInfo.islong || self._mouseInfo.source === self) {
+						self.hide().emit("selected", key);
+					}
+					self._mouseInfo.source = null;
+					self._mouseInfo.isdown = false;
+					self._mouseInfo.islong = false;
+					e.preventDefault();
+					return false;
+				});
+				document.addEventListener("mouseup", function () {
 					if (self._mouseInfo.islong || self._mouseInfo.source === self) {
 						self.hide().emit("selected", key);
 					}
