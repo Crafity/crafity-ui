@@ -225,9 +225,11 @@
 						editControl.value(actualValue);
 						if (column.editable.events && column.editable.events.length) {
 							column.editable.events.forEach(function (event) {
-								editControl.on(event, function () {
-									var args = Array.prototype.slice.apply(arguments);
-									self.emit.apply(self, [event, column, row].concat(args));
+								Object.keys(event).forEach(function (eventName) {
+									editControl.on(eventName, function () {
+										var args = Array.prototype.slice.apply(arguments);
+										self.emit.apply(self, [event[eventName], column, row].concat(args));
+									});
 								});
 							});
 						}
@@ -236,7 +238,7 @@
 						instantiate = new Function("return new " + column.clickable.control + "()");
 						var clickControl = instantiate();
 						throw new Error("Not implemented");
-//						if (column.options) { clickControl.options(column.options); }
+						if (column.options) { clickControl.options(column.options); }
 						clickControl.text(actualValue.toString());
 //						if (column.editable.events && column.editable.events.length) {
 //							column.editable.events.forEach(function (event) {
