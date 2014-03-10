@@ -236,10 +236,10 @@ little-arrow-size=3px
 				font-size: 4pt
 		.option-list
 			display: none
-			position: absolute
+			position: fixed
 			top: -5px
 			left: -20px
-			min-width: 100%
+			//min-width: 100%
 			background: white
 			border: 1px solid #EAEAEA
 			padding: 4px 0 4px 0
@@ -251,7 +251,7 @@ little-arrow-size=3px
 				line-height: 1.2em
 				position: relative
 				white-space: pre
-				height: 1.2em
+				height: 17px  
 				border-top: 1px solid transparent;
 				border-bottom: 1px solid transparent;
 				&.hover
@@ -462,8 +462,8 @@ little-arrow-size=3px
 			&.selected
 				selection(!important)
 				.cell,
-				.cell:nth-child(1),
-				.cell:nth-child(1) *
+				.cell:nth-child(1) span,
+				.cell:nth-child(1) span *
 					color: white
 			&.top-spacer
 				height: 2em
