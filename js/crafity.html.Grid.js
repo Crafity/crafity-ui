@@ -23,6 +23,7 @@
 			var sortHandler = null;
 
 			var _rows = null;
+			var _selectedRowId = null;
 
 			var keys = {};
 			container.addEventListener("keydown",
@@ -49,6 +50,7 @@
 
 			this.addClass("grid");
 
+			/* Auxuliary methods */
 			function sortRowsPerColumn(column, sortOrder) {
 				var sortedRows = [];
 				var valuesSortedPerColumn = _rows
@@ -104,7 +106,8 @@
 			function addRows(rows) {
 				rows.forEach(self.addRow);
 			}
-
+			
+			/* public methods */
 			this.addColumn = function (column) {
 				var th = new html.Element("th").addClass("sortable");
 				var stickyTH = new html.Element("div");
@@ -122,7 +125,8 @@
 
 						if (th.hasClass(ASC)) {
 							lastSortOrder = ASC;
-						} else if (th.hasClass(DESC)) {
+						}
+						else if (th.hasClass(DESC)) {
 							lastSortOrder = DESC;
 						}
 
@@ -132,9 +136,11 @@
 
 						if (lastSortOrder === ASC) {
 							th.addClass(newSortOrder = DESC);
-						} else if (lastSortOrder === DESC) {
+						}
+						else if (lastSortOrder === DESC) {
 							th.addClass(newSortOrder = ASC);
-						} else {
+						}
+						else {
 							th.addClass(newSortOrder = ASC); // default
 						}
 
@@ -165,7 +171,7 @@
 
 			this.addRow = function (row) {
 				var rowElement = new html.Element("tr").appendTo(tbody).addClass("row");
-
+				
 				function highlightRow() {
 					tbody.children().forEach(function (child) {
 						child.removeClass("selected");
@@ -173,8 +179,18 @@
 					rowElement.addClass("selected");
 					self.emit("selectedGridRow", row);
 				}
+				
+				// Highlight visually the selected row in two cases:
+				// via databinding with new coming rows
+				if (_selectedRowId !== null && _selectedRowId === row.Id) {
+					highlightRow();
+				}
+				// via the GUI on user click 
+				rowElement.addEventListener(crafity.core.events.click, function (e) {
+					_selectedRowId = row.Id;
+					highlightRow();
+				});
 
-				rowElement.addEventListener(crafity.core.events.click, highlightRow);
 				function open(key, e) {
 					highlightRow();
 					self.emit("open", row);
@@ -191,7 +207,8 @@
 
 					if (column.options) {
 						td.addClass("string");
-					} else {
+					}
+					else {
 						td.addClass(column.type.toLowerCase());
 					}
 
@@ -200,16 +217,19 @@
 					if (actualValue === undefined || actualValue === null) {
 						actualValue = EMPTY_VALUE;
 
-					} else if (column.type === TYPE_NUMBER && typeof actualValue === "number" && !isNaN(actualValue)) {
+					}
+					else if (column.type === TYPE_NUMBER && typeof actualValue === "number" && !isNaN(actualValue)) {
 						if (actualValue < 0) {
 							td.addClass("negative");
-						} else {
+						}
+						else {
 							td.addClass("positive");
 						}
 						if (column.format) {
 							actualValue = numeral(actualValue).format(column.format);
 						}
-					} else if (column.type === TYPE_DATE) {
+					}
+					else if (column.type === TYPE_DATE) {
 						if (column.format) {
 							actualValue = moment(actualValue).format(column.format);
 						}
@@ -234,22 +254,24 @@
 							});
 						}
 						td.append(editControl);
-					} else if (column.clickable) {
+					}
+					else if (column.clickable) {
 						instantiate = new Function("return new " + column.clickable.control + "()");
 						var clickControl = instantiate();
 						throw new Error("Not implemented");
 						if (column.options) { clickControl.options(column.options); }
 						clickControl.text(actualValue.toString());
-//						if (column.editable.events && column.editable.events.length) {
-//							column.editable.events.forEach(function (event) {
-//								clickControl.on(event, function () {
-//									var args = Array.prototype.slice.apply(arguments);
-//									self.emit.apply(self, [event, column, row].concat(args));
-//								});
-//							});
-//						}
+						//						if (column.editable.events && column.editable.events.length) {
+						//							column.editable.events.forEach(function (event) {
+						//								clickControl.on(event, function () {
+						//									var args = Array.prototype.slice.apply(arguments);
+						//									self.emit.apply(self, [event, column, row].concat(args));
+						//								});
+						//							});
+						//						}
 						td.append(clickControl);
-					} else {
+					}
+					else {
 						td.text(actualValue.toString());
 					}
 
