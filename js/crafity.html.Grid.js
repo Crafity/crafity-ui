@@ -271,7 +271,6 @@
 			};
 
 			this.addRows = function (rows) {
-				console.log("\n\n\n INSIDE grid.addRows....");
 				this.clearRows();
 
 				if (!columns || !columns.length) {
@@ -285,21 +284,17 @@
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				!sortHandler && columns.some(function (column) {
-					console.log("\n\ncolumn.sortable ? ", column.sortable);
 					if (column.sortable) {
 						sorted = true;
 						sortedRows = sortRowsPerColumn(column, column.sortable);
-						console.log("\n\n sortRowsPerColumn( $s, $s )", column, column.sortable);
 						return true;
 					}
 					return false;
 				});
 				if (!sorted) {
-					console.log("!sorted", !sorted);
 					sortedRows = rows;
 				}
 
-				console.log("\n\n RESULT: sortedRows", sortedRows);
 				// 2. add rows
 				addRows(sortedRows);
 			};

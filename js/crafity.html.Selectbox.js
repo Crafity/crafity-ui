@@ -76,7 +76,6 @@
 						var top = rects[0].top;
 						var bottom = rects[0].top + rects[0].height;
 						var marginTop = optionListElement.style.marginTop.replace(/px$/i, "");
-						console.log("top", top);
 						if (top < 0) {
 							optionListElement.style.marginTop = (parseInt(marginTop, 10) - top) + "px";
 						}
