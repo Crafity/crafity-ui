@@ -106,8 +106,8 @@
 			function addRows(rows) {
 				rows.forEach(self.addRow);
 			}
-			
-			/* public methods */
+
+			/* Public methods */
 			this.addColumn = function (column) {
 				var th = new html.Element("th").addClass("sortable");
 				var stickyTH = new html.Element("div");
@@ -171,7 +171,7 @@
 
 			this.addRow = function (row) {
 				var rowElement = new html.Element("tr").appendTo(tbody).addClass("row");
-				
+
 				function highlightRow() {
 					tbody.children().forEach(function (child) {
 						child.removeClass("selected");
@@ -179,13 +179,13 @@
 					rowElement.addClass("selected");
 					self.emit("selectedGridRow", row);
 				}
-				
+
 				// Highlight visually the selected row in two cases:
-				// via databinding with new coming rows
+				// 1. via databinding with new coming rows
 				if (_selectedRowId !== null && _selectedRowId === row.Id) {
 					highlightRow();
 				}
-				// via the GUI on user click 
+				// 2. via the GUI on user click 
 				rowElement.addEventListener(crafity.core.events.click, function (e) {
 					_selectedRowId = row.Id;
 					highlightRow();
@@ -205,26 +205,18 @@
 				columns.forEach(function (column) {
 					var td = new html.Element("td").addClass("cell").appendTo(rowElement);
 
-					if (column.options) {
-						td.addClass("string");
-					}
-					else {
-						td.addClass(column.type.toLowerCase());
-					}
+					if (column.options) { td.addClass("string"); }
+					else { td.addClass(column.type.toLowerCase()); }
 
 					var actualValue = row[column.property];
 
 					if (actualValue === undefined || actualValue === null) {
 						actualValue = EMPTY_VALUE;
-
 					}
 					else if (column.type === TYPE_NUMBER && typeof actualValue === "number" && !isNaN(actualValue)) {
-						if (actualValue < 0) {
-							td.addClass("negative");
-						}
-						else {
-							td.addClass("positive");
-						}
+						if (actualValue < 0) { td.addClass("negative"); }
+						else { td.addClass("positive"); }
+
 						if (column.format) {
 							actualValue = numeral(actualValue).format(column.format);
 						}
@@ -279,6 +271,7 @@
 			};
 
 			this.addRows = function (rows) {
+				console.log("\n\n\n INSIDE grid.addRows....");
 				this.clearRows();
 
 				if (!columns || !columns.length) {
@@ -292,17 +285,21 @@
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
 				columns.some(function (column) {
+					console.log("\n\ncolumn.sortable ? ", column.sortable);
 					if (column.sortable) {
 						sorted = true;
 						sortedRows = sortRowsPerColumn(column, column.sortable);
+						console.log("\n\n sortRowsPerColumn( $s, $s )", column, column.sortable);
 						return true;
 					}
 					return false;
 				});
 				if (!sorted) {
+					console.log("!sorted", !sorted);
 					sortedRows = rows;
 				}
 
+				console.log("\n\n RESULT: sortedRows", sortedRows);
 				// 2. add rows
 				addRows(sortedRows);
 			};
