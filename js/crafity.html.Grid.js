@@ -284,7 +284,7 @@
 
 				// 1. sort rows
 				// NB this will sort the last winning sortable column in the array of columns
-				columns.some(function (column) {
+				!sortHandler && columns.some(function (column) {
 					console.log("\n\ncolumn.sortable ? ", column.sortable);
 					if (column.sortable) {
 						sorted = true;
