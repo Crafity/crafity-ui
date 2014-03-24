@@ -6,6 +6,11 @@
 
 	(function (html) {
 
+		/**
+		 * Grid web control.
+		 * @param columns
+		 * @constructor
+		 */
 		function Grid(columns) {
 			var self = this;
 			var container = new html.Element("div").addClass("container").appendTo(this);
